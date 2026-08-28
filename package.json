@@ -9,17 +9,14 @@
     "postbuild": "node scripts/generate-markdown-twins.mjs",
     "start": "next start"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "dependencies": {
-    "@ao/auth": "workspace:*",
-    "@ao/email": "workspace:*",
-    "@ao/shared": "workspace:*",
-    "@ao/ui": "workspace:*",
+    "@ao/auth": "file:packages/auth",
+    "@ao/email": "file:packages/email",
+    "@ao/shared": "file:packages/shared",
+    "@ao/ui": "file:packages/ui",
     "@mux/mux-player-react": "^3.13.2",
     "@neondatabase/serverless": "^1.1.0",
-    "@paper-design/shaders-react": "workspace:*",
+    "@paper-design/shaders-react": "file:packages/shaders-react",
     "@sentry/nextjs": "10.46.0",
     "@t3-oss/env-nextjs": "0.13.11",
     "@xterm/xterm": "^6.0.0",
@@ -46,7 +43,7 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
-    "@ao/typescript": "workspace:*",
+    "@ao/typescript": "file:packages/typescript",
     "@tailwindcss/postcss": "4.2.2",
     "@tailwindcss/typography": "0.5.19",
     "@types/mdx": "2.0.13",
