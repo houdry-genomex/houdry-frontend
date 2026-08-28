@@ -14,6 +14,7 @@ import { CTAButtons } from "./components/CTAButtons";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { LaunchAnalytics } from "./components/LaunchAnalytics";
+import { SmoothScroll } from "./components/SmoothScroll/SmoothScroll";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -129,9 +130,13 @@ export default function RootLayout({
       <body className="relative overscroll-none font-sans antialiased">
         <Providers>
           <LaunchAnalytics />
+          {/* Fixed-position chrome stays outside the ScrollSmoother wrapper:
+              transformed containers break position:fixed descendants. */}
           <Header ctaButtons={<CTAButtons />} />
-          {children}
-          <Footer />
+          <SmoothScroll>
+            {children}
+            <Footer />
+          </SmoothScroll>
           <CookieConsent />
         </Providers>
       </body>
