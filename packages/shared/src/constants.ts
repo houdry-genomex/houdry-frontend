@@ -3,7 +3,7 @@ export const COMPANY = {
   SHORT_NAME: "Houdry",
   MARKETING_URL: "https://houdry.example.com",
   DOCS_URL: "https://houdry.example.com/docs",
-  GITHUB_URL: "https://github.com/Untrivial-ai/agent-orchestrator",
+  GITHUB_URL: "https://github.com/houdry-genomex/",
   GITHUB_REPO: "Untrivial-ai/agent-orchestrator",
   STATUS_URL: "https://houdry.example.com/status",
   TRUST_URL: "https://houdry.example.com/privacy/",

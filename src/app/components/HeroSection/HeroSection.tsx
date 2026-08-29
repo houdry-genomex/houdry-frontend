@@ -5,7 +5,6 @@ import {
   HERO_SUBHEADLINE,
   TAGLINE,
 } from "@ao/shared/constants";
-import { Star } from "lucide-react";
 import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { track } from "@/lib/analytics";
@@ -16,26 +15,16 @@ const INSTALL_COMMAND = "brew install agentwrapper/tap/agent-orchestrator";
 // Wraps at the path separators instead of mid-word once the pill goes two-line.
 const INSTALL_COMMAND_PARTS = INSTALL_COMMAND.split("/");
 
-function formatStarCount(count: number) {
-  if (count >= 1000) {
-    return `${(count / 1000).toFixed(1).replace(/\.0$/, "")}k`;
-  }
-
-  return count.toString();
-}
-
 interface HeroSectionProps {
   initialStars: number | null;
 }
 
-export function HeroSection({ initialStars }: HeroSectionProps) {
+// initialStars is kept in the props contract so page.tsx stays untouched, but
+// the button no longer displays a star count.
+export function HeroSection(_props: HeroSectionProps) {
   const [copiedCommand, setCopiedCommand] = useState(false);
-  const stars = initialStars;
 
-  const githubButtonLabel =
-    stars === null
-      ? "Stars on GitHub"
-      : `${formatStarCount(stars)} Stars on GitHub`;
+  const githubButtonLabel = "GitHub";
 
   const copyInstallCommand = async () => {
     if (!navigator.clipboard) return;
@@ -75,18 +64,7 @@ export function HeroSection({ initialStars }: HeroSectionProps) {
                 className="inline-flex items-center gap-2.5 rounded-3xl border border-border bg-background px-5 py-2.5 sm:py-3 text-sm sm:text-base font-normal tracking-[-0.5px] text-foreground transition-colors hover:bg-muted"
               >
                 <FaGithub className="size-4" aria-hidden="true" />
-                <span>Built on AO · Apache-2.0</span>
-                {stars !== null ? (
-                  <span className="flex items-center gap-1 pl-0.5 text-muted-foreground">
-                    <Star
-                      className="size-3.5 fill-yellow-400 text-yellow-400"
-                      aria-hidden="true"
-                    />
-                    <span className="tabular-nums">
-                      {formatStarCount(stars)}
-                    </span>
-                  </span>
-                ) : null}
+                <span>GitHub</span>
               </a>
             </div>
 

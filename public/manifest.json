@@ -1,16 +1,16 @@
 {
-	"name": "Agent Orchestrator",
-	"short_name": "AO",
-	"description": "Mission control for a fleet of coding agents",
+	"name": "Houdry",
+	"short_name": "Houdry",
+	"description": "Sovereign on-premise agentic AI workbench",
 	"start_url": "/",
-	"display": "standalone",
+	"display": "browser",
 	"background_color": "#0a0a0a",
 	"theme_color": "#0a0a0a",
 	"icons": [
 		{
-			"src": "/favicon.svg",
+			"src": "/logo.png",
 			"sizes": "any",
-			"type": "image/svg+xml"
+			"type": "image/png"
 		}
 	]
 }

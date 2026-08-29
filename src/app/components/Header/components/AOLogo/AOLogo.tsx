@@ -5,12 +5,12 @@ export function AOLogo() {
       className="inline-flex items-center gap-2 font-sans text-base font-medium leading-none tracking-[-0.5px] text-foreground"
     >
       <img
-        src="/ao-logo.svg"
+        src="/logo.png"
         alt=""
         width={20}
         height={20}
         aria-hidden="true"
-        className="size-5 shrink-0"
+        className="size-5 shrink-0 rounded object-contain"
       />
       <span>Houdry</span>
     </span>

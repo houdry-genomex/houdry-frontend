@@ -90,7 +90,8 @@ export const metadata: Metadata = {
       { url: "/favicon.svg", type: "image/svg+xml" },
     ],
   },
-  manifest: "/manifest.json",
+  // No web-app manifest on purpose: it made phone browsers show an
+  // "install this app" banner on page open, which this site does not want.
 };
 
 export default function RootLayout({
