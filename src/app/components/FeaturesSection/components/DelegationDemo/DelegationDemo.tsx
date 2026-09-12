@@ -990,8 +990,7 @@ function PreviewSidebar({
 				</div>
 			</div>
 			<div className="flex shrink-0 items-center gap-1.5 px-3 pb-2">
-				<img src="/ao-logo.svg" alt="" className="size-[18px] shrink-0 rounded-md" draggable={false} />
-				<span className="truncate text-sm font-semibold tracking-tight text-[var(--preview-foreground)]">Houdry</span>
+				<img src="/houdry-logo.png" alt="" className="h-[18px] w-auto shrink-0 object-contain mix-blend-lighten" draggable={false} />
 			</div>
 			<div className="flex shrink-0 flex-col px-2">
 				<div className="mb-3">

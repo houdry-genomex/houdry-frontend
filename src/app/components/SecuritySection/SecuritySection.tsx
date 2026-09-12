@@ -17,13 +17,13 @@ const SECURITY_FEATURES: {
 		icon: <HiOutlineCodeBracket className="w-5 h-5 text-foreground/70" />,
 		title: "Open Source",
 		description:
-			"Free and open source under Apache 2.0. Inspect, audit, and contribute to the code. No black boxes, no hidden functionality.",
+			"Houdry Agent is MIT. Inspect, audit, and contribute. Fabric ships as signed GitHub Releases you run on your own GPU workstations.",
 	},
 	{
 		icon: <HiOutlineServerStack className="w-5 h-5 text-foreground/70" />,
 		title: "Offline First",
 		description:
-			"Your code stays on your machine. Work without an internet connection. All processing happens locally.",
+			"Your documents stay on the plant LAN. GPU workstations run Houdry Fabric. All inference happens there.",
 	},
 	{
 		icon: <HiOutlineSignal className="w-5 h-5 text-foreground/70" />,

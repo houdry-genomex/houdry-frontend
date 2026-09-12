@@ -24,7 +24,7 @@ export async function generateMetadata({
     description: doc.description,
     alternates: { canonical: doc.url },
     openGraph: {
-      title: `${doc.title} | Agent Orchestrator Docs`,
+      title: `${doc.title} | Houdry Docs`,
       description: doc.description,
       url: doc.url,
       images: ["/og-image.png"],
@@ -45,7 +45,7 @@ export default async function DocsPage({ params }: { params: Promise<{ slug?: st
       <header>
         <div className="mx-auto max-w-7xl px-6 xl:pl-[18rem] 2xl:pl-[19rem]">
           <div className="max-w-3xl pt-16 pb-10 md:pt-20 md:pb-12">
-            <p className="text-sm text-muted-foreground">Documentation</p>
+            <p className="text-sm text-muted-foreground">Houdry Fabric and Houdry Agent</p>
             <h1
               data-doc-title
               className="mt-4 text-balance text-3xl font-medium tracking-[-0.5px] text-foreground md:text-4xl"
@@ -58,7 +58,7 @@ export default async function DocsPage({ params }: { params: Promise<{ slug?: st
               </p>
             ) : (
               <p data-doc-description className="mt-3 max-w-2xl text-pretty text-muted-foreground">
-                Product docs for running, extending, and operating Agent Orchestrator.
+                Product docs for Houdry Fabric and Houdry Agent.
               </p>
             )}
           </div>

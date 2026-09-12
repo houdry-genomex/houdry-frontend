@@ -1,108 +1,91 @@
 ---
 title: Quickstart
-description: Add a project, start one worker, and follow it from task to pull request.
+description: Bring up Fabric, connect Agent, and run the first on-prem task.
 ---
 
-This guide follows the smallest useful AO loop in the desktop app: add one repository, start one worker, watch it work, and review the result.
+This is the smallest useful loop: one GPU workstation, one desk, one prompt.
 
 <Callout type="info" title="Before you start">
-	Install AO, authenticate `gh` for a GitHub project, and sign in to one supported agent harness. See [Installation](/docs/installation).
+	Fabric is installed on the GPU machine. Agent is installed on the desk. Ollama is running on the GPU host with at least one model pulled. See [Installation](/docs/installation).
 </Callout>
-
-## Pick A Safe First Task
-
-Choose a repository where you can create a branch and pull request. Good first tasks have a clear finish line:
-
-- Fix a small bug with a reproducible failure.
-- Add one focused test.
-- Update a short documentation page.
-- Make a narrow refactor with explicit acceptance criteria.
-
-## Run The First Session
 
 <Steps>
 <Step>
 
-### Add the repository
+### Start the fabric
 
-Open Agent Orchestrator, choose **Add project**, and select the local repository. The desktop app registers it and keeps the original checkout intact.
+On the GPU workstation, terminal 1:
 
-</Step>
-<Step>
-
-### Create a worker
-
-Create a new task from the project and enter a short name plus a specific prompt. Select an installed agent harness.
-
-Choose the interface that fits the task:
-
-- **Chat** for structured conversation, activities, approvals, plans, and durable history.
-- **Terminal UI** for the harness's native interactive terminal.
-
-AO creates an isolated git worktree and branch for the session before launching the selected controller.
-
-</Step>
-<Step>
-
-### Follow the session
-
-Select the session in the sidebar or board. The main pane shows either its Chat conversation or live terminal. The inspector keeps session details, pull-request state, reviews, changed files, and browser preview close at hand.
-
-Activity such as active, idle, waiting for input, blocked, or exited is combined with pull-request facts to derive the status shown by AO.
-
-</Step>
-<Step>
-
-### Give feedback
-
-Use the Chat composer or session message controls for follow-up instructions. Keep corrections concrete:
-
-```text
-Keep this change limited to the API route. Do not refactor the shared client.
+```bash
+houdry serve --listen 0.0.0.0:8080
 ```
 
-For a TUI session, the terminal remains available when direct interaction is needed.
+Terminal 2 on that machine (or on a second GPU box):
+
+```bash
+houdry gpu detect
+houdry gpu register
+```
+
+Leave `register` running. Cluster dashboard: `http://127.0.0.1:8080/`.
 
 </Step>
 <Step>
 
-### Review the pull request
+### Connect Houdry Agent
 
-After the worker opens or claims a pull request, AO shows a concise summary of CI, reviewers, unresolved review comments, and mergeability. You can run a reviewer agent, send requested changes back to the worker, resolve comments, or merge when appropriate.
+Open Houdry Agent. Choose **Houdry server URL**.
 
-AO never force-deletes a dirty worktree. Cleanup preserves user work when it cannot safely remove a session workspace.
+| Agent is on… | URL |
+| --- | --- |
+| The same machine as `houdry serve` | `http://127.0.0.1:8080/v1` |
+| Another machine on the LAN | `http://<gpu-host>:8080/v1` |
+
+Optional key: `houdry`. On one control plane on Wi‑Fi, the URL often fills in. Confirm with **Connect**. The model should read as fabric `auto` unless you pin a name.
+
+</Step>
+<Step>
+
+### Put your files in Knowledge
+
+In Agent, open **Knowledge base**. Add the SOPs, inspection reports, and manuals this site is allowed to read.
+
+- Files stay on this computer. They are not uploaded to a public model host.
+- On each SOP, set **standing rules** (cite the SOP, do not invent procedure, stay on this network).
+
+Do not paste whole manuals into chat if they already live in Knowledge.
+
+</Step>
+<Step>
+
+### Run one real task
+
+Start a **New session**. Keep the first prompt narrow:
+
+```text
+Read 01_Inspection_Report_E204.pdf and the matching SOP.
+Draft an approval note. Quote every finding from the source. Do not invent values.
+```
+
+The fabric routes the work (`model=auto`) to a READY GPU node. The answer comes back in Agent. Nothing is mailed out.
 
 </Step>
 </Steps>
 
-## Try A Browser Preview
+## If chat does not answer
 
-For a web task, start the app inside the session and select its URL with the optional CLI:
+1. `houdry discover` on the GPU machine: is the control plane visible?
+2. `houdry gpu detect`: is a GPU listed?
+3. Is `houdry gpu register` still running (not exited)?
+4. Is Ollama up, with a model pulled?
+5. Is Agent pointed at `:8080/v1`, not a public LLM URL?
 
-```bash
-ao preview http://127.0.0.1:5173
-```
-
-If the repository includes `.ao/launch.json`, `ao preview start` can start a configured development server. The Browser tab then displays the selected target. AO does not guess a preview target merely because a worker exists.
-
-## Try Switching Interfaces
-
-Compatible Claude Code and Codex sessions expose **Open Chat** or **Open Terminal UI**. An idle session can switch directly. If a turn is busy, AO asks whether to finish and drain it or stop and interrupt it before replacing the controller. The AO session and worktree remain the same.
-
-## Optional CLI
-
-The CLI is a thin client for the app-owned daemon. It is useful for scripting and terminal-first workflows, but is not required for normal desktop use.
-
-```bash
-ao status
-ao session ls
-ao send --session <session-id> --message "Run the focused tests before you finish."
-```
+More in [Troubleshooting](/docs/troubleshooting).
 
 ## Next
 
 <Cards>
-	<Card title="Dashboard" description="Learn the board, session view, inspector, Chat, and terminal." href="/docs/dashboard" />
-	<Card title="Architecture" description="See how the desktop app and daemon coordinate sessions." href="/docs/architecture" />
-	<Card title="Examples" description="Try current desktop and CLI workflows." href="/docs/examples" />
+	<Card title="Houdry Agent" description="Sessions, knowledge, and the desktop." href="/docs/dashboard" />
+	<Card title="Guides" description="More GPUs, SOPs, air-gap checks." href="/docs/guides" />
+	<Card title="Architecture" description="How serve, register, and Agent fit." href="/docs/architecture" />
 </Cards>

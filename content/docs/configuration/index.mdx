@@ -1,76 +1,60 @@
 ---
 title: Configuration
-description: Configure projects, agents, session interfaces, and local daemon behavior in current AO.
+description: Fabric listen address, Agent fabric URL, tokens, and data directories.
 ---
 
-AO keeps its durable state under `~/.ao`. The daemon stores projects, sessions, pull-request facts, notifications, and typed project configuration in SQLite under `~/.ao/data`; `~/.ao/running.json` lets the desktop app and CLI find the running daemon.
+There are **two config homes**. Mixing them is the usual “I edited the wrong file” failure.
 
-The desktop app is the normal place to add projects and change settings. The CLI talks to the same daemon API when you need a scriptable path.
-
-## Add a project
-
-In the desktop app, choose **Add project** and select a local repository. From the CLI:
-
-```bash
-ao project add --path /absolute/path/to/repo
-```
-
-To set the default agents while registering the project:
-
-```bash
-ao project add --path /absolute/path/to/repo \
-  --worker-agent codex \
-  --orchestrator-agent claude-code
-```
-
-AO also supports workspace projects, which contain a root repository and direct child repositories:
-
-```bash
-ao project add --path /absolute/path/to/workspace --as-workspace
-```
-
-Fresh installations include a Scratch project for work that does not need Git. Scratch sessions use AO-managed directories and do not support branches or pull-request claims.
-
-## Inspect and update configuration
-
-```bash
-ao project ls
-ao project get <project-id>
-ao project set-config <project-id> --worker-agent codex
-```
-
-`set-config` replaces the stored project configuration. Prefer project settings in the desktop app for interactive edits, or first inspect `ao project get <project-id> --json` before replacing configuration in a script. `--config-json` accepts a JSON object string, not a filename.
-
-Current project configuration is typed. It covers the base branch, session prefix, environment variables, symlinks, setup commands, worker and orchestrator agents, agent options, project rules, reviewer agents, tracker intake, and container cleanup. Unknown fields are rejected instead of being silently ignored.
-
-See [Projects](/docs/configuration/projects) for the current field reference.
-
-## Daemon environment
-
-The primary daemon listener is always loopback-only and unauthenticated. Its bind host is not configurable. Useful environment variables include:
-
-| Variable | Default | Purpose |
+| Product | Default directory | What lives there |
 | --- | --- | --- |
-| `AO_PORT` | `3001` | REST, events, terminal mux, health, and control port |
-| `AO_DATA_DIR` | `~/.ao/data` | Durable daemon data |
-| `AO_RUN_FILE` | `~/.ao/running.json` | Daemon discovery file |
-| `AO_REQUEST_TIMEOUT` | `60s` | REST request timeout |
-| `AO_SHUTDOWN_TIMEOUT` | `10s` | Graceful shutdown deadline |
-| `AO_ALLOWED_ORIGINS` | packaged desktop origin | Additional trusted browser origins |
+| Fabric (`houdry`) | `~/.houdry` (`HOODRY_HOME`) | Binary, node id, server state, catalog |
+| Agent (desktop) | `~/.houdry-agent` or `%LOCALAPPDATA%\houdry-agent` | Sessions, knowledge, `config.yaml` |
 
-Do not set `HOST=0.0.0.0` or proxy the primary daemon to a network. For phone access, use the separate authenticated listener created by **Connect Mobile**. See [Remote access](/docs/configuration/remote-access).
+## Point Agent at Fabric
 
-## Chat and Terminal UI defaults
+In the app: **Houdry server URL** → `http://<host>:8080/v1`.
 
-Every session commits to one interface at a time:
+| Place | URL |
+| --- | --- |
+| Dashboard in a browser | `http://<host>:8080/` |
+| Agent / OpenAI SDK | `http://<host>:8080/v1` |
 
-- **Chat** uses a structured, runtime-less provider controller with durable messages, activities, approvals, and usage.
-- **Terminal UI** runs the agent's native terminal interface through AO's terminal runtime.
+Equivalent Agent config if you edit files instead of the UI:
 
-Choose the default for new sessions in project settings. You can also select it explicitly from the new-session flow or with `ao spawn --mode chat|tui`. Compatible Claude Code and Codex sessions can switch interfaces later without changing the AO session or worktree.
+```yaml
+# ~/.houdry-agent/config.yaml
+model:
+  provider: custom
+  base_url: http://127.0.0.1:8080/v1
+  default: auto
+```
+
+```bash
+# ~/.houdry-agent/.env
+OPENAI_API_KEY=houdry
+```
+
+`OPENAI_API_KEY` here is only the token Fabric expects. It does not send traffic to OpenAI.
+
+## Fabric listen and token
+
+```bash
+houdry serve --listen 0.0.0.0:8080 --token YOUR_TOKEN
+```
+
+Then Agent must send that token. CLI:
+
+```bash
+export HOODRY_SERVER=http://127.0.0.1:8080
+export HOODRY_TOKEN=YOUR_TOKEN
+```
+
+`--no-lan-discover` disables Wi‑Fi announce. Everyone then uses an explicit URL.
+
+## Next
 
 <Cards>
-	<Card title="Projects" href="/docs/configuration/projects" description="Configure one project and its session roles." />
-	<Card title="Lifecycle automation" href="/docs/configuration/lifecycle-automation" description="Understand built-in CI, review, and merge-conflict handling." />
-	<Card title="Remote access" href="/docs/configuration/remote-access" description="Pair the native mobile app safely." />
+	<Card title="Knowledge and files" href="/docs/configuration/projects" description="SOPs and files on the desk." />
+	<Card title="LAN and fabric URL" href="/docs/configuration/remote-access" description="Discovery vs pasted URL." />
+	<Card title="Scheduled jobs" href="/docs/configuration/lifecycle-automation" description="Cron-style work in Agent." />
 </Cards>

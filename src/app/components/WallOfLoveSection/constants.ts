@@ -17,7 +17,7 @@ export const TESTIMONIALS: Testimonial[] = [
     author: "Why air-gapped?",
     role: "The problem",
     content:
-      "Refineries, PSUs, and defence-linked units generate constant knowledge work — approval notes, engineering calculations, drawing reviews — but none of it can touch cloud AI. P&IDs, financials, and vendor negotiations stay on premises by policy.\n\nSo the work is done manually, or confidential material quietly ends up in public tools anyway. Houdry removes that trade-off.",
+      "Refineries, PSUs, and defence-linked units generate constant knowledge work (approval notes, engineering calculations, drawing reviews) but none of it can touch cloud AI. P&IDs, financials, and vendor negotiations stay on premises by policy.\n\nSo the work is done manually, or confidential material quietly ends up in public tools anyway. Houdry removes that trade-off.",
     url: "/",
   },
   {
@@ -25,7 +25,7 @@ export const TESTIMONIALS: Testimonial[] = [
     author: "Open weights, local GPU",
     role: "The approach",
     content:
-      "Open-weight reasoning models are now genuinely useful. Houdry serves them from your own hardware through Ollama — DeepSeek R1 for reasoning, Qwen2.5-VL for vision — and routes every task to the best fit automatically.",
+      "Open-weight reasoning models are now genuinely useful. Houdry Fabric serves them from GPU workstations you already own (DeepSeek R1 for reasoning, Qwen2.5-VL for vision) and routes every task to the best (model, node) pair.",
     url: "/",
   },
   {
@@ -49,7 +49,7 @@ export const TESTIMONIALS: Testimonial[] = [
     author: "Grounded in your documents",
     role: "The knowledge base",
     content:
-      "Answers cite your own SOPs, manuals, and past correspondence through a local index — so the note that comes out matches how your organization actually writes them.",
+      "Answers cite your own SOPs, manuals, and past correspondence through a local index, so the note that comes out matches how your organization actually writes them.",
     url: "/",
   },
   {

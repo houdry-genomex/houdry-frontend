@@ -1,0 +1,16 @@
+---
+title: Keep work on the LAN
+description: Make sure chat is Fabric, not a public model.
+---
+
+Houdry’s claim is local inference. A mis-pointed Agent will quietly use a cloud endpoint instead.
+
+Checklist:
+
+1. Agent provider is **Houdry server URL**, base `http://…:8080/v1`.
+2. `houdry serve` is bound to the plant LAN, not a public IP.
+3. `houdry gpu register` is running on the GPU workstation.
+4. Ollama is local on that workstation.
+5. WAN can be unplugged; a short prompt still answers.
+
+If a reply mentions a public lab or asks to “enable network,” you are not on Fabric. Reconnect using [Connect Agent to Fabric](/docs/guides/connect-to-fabric).

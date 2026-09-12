@@ -7,12 +7,12 @@ export const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Does any data ever leave our premises?",
     answer:
-      "No. Houdry runs entirely on your own GPU server: models are served locally by Ollama, tools execute in a local sandbox, and the daemon binds to localhost only. A live network monitor shows zero outbound requests during a session — you can verify the air gap yourself.",
+      "No. Houdry Fabric runs on your GPU workstations (`houdry serve` + `houdry gpu register`). Houdry Agent on each desk talks to that fabric over the plant LAN. Models stay on your hardware. A live network monitor shows zero outbound requests during a session, so you can verify the air gap yourself.",
   },
   {
     question: "Which models does it use?",
     answer:
-      "Open-weight models running locally: DeepSeek R1 for reasoning, Qwen2.5-VL for drawings and scanned documents, and any other model you pull into Ollama. Each task is routed to the best fit automatically, and adding a new model is a config entry, not a redesign.",
+      "Open-weight models running on the fabric: DeepSeek R1 for reasoning, Qwen2.5-VL for drawings and scanned documents, and any other model you pull into Ollama on a GPU workstation. The fabric router (`model=auto`) picks the best (model, node) pair; pinning a named model is a config entry, not a redesign.",
   },
   {
     question: "What kinds of work can it actually do?",
@@ -22,11 +22,11 @@ export const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Is Houdry free to use?",
     answer:
-      "Yes. Houdry is built on open-source foundations under Apache 2.0 and runs as a local daemon on your own hardware. No account, no cloud, no per-seat licence.",
+      "Yes. Houdry Agent is open source under MIT. Houdry Fabric installs from GitHub Releases onto your own GPU workstations. No account, no cloud, no per-seat licence.",
   },
   {
     question: "What hardware does it need?",
     answer:
-      "A single workstation or server with a mid-range GPU is enough for the demonstration setup. Larger open-weight models scale up with your hardware — the software stack stays the same from a laptop demo to a datacenter deployment.",
+      "A single GPU workstation is enough for the demonstration setup. Extra workstations join the same fabric with `houdry gpu register`. Larger open-weight models scale with VRAM. The stack stays the same from one GPU workstation to a plant floor of them.",
   },
 ];

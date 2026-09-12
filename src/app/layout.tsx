@@ -26,28 +26,24 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 const siteDescription =
-  "A sovereign, air-gapped AI workbench that runs open-weight models on your own GPU server — reports read, notes drafted, code verified, with zero external calls.";
+  "Houdry Fabric turns GPU workstations into a private cluster. Houdry Agent is the desktop app on each desk. Open-weight models stay on premises.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(COMPANY.MARKETING_URL),
   title: {
-    default: `Sovereign On-Premise AI Workbench | ${COMPANY.NAME}`,
+    default: `Private GPU Fabric + Desktop Agent | ${COMPANY.NAME}`,
     template: `%s | ${COMPANY.NAME}`,
   },
   description: siteDescription,
   keywords: [
-    "coding agents",
-    "agent orchestration",
-    "parallel execution",
-    "developer tools",
-    "AI coding",
-    "git worktrees",
-    "code automation",
-    "Claude Code",
-    "Cursor",
-    "Codex",
-    "agent fleet",
-    "PR automation",
+    "private GPU fabric",
+    "on-premise AI",
+    "Houdry Agent",
+    "Houdry Fabric",
+    "GPU workstation",
+    "air-gapped AI",
+    "open-weight models",
+    "Ollama",
   ],
   authors: [{ name: `${COMPANY.NAME} Team` }],
   creator: COMPANY.NAME,
@@ -87,7 +83,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/houdry-logo.png", type: "image/png" },
     ],
   },
   // No web-app manifest on purpose: it made phone browsers show an
@@ -109,7 +105,6 @@ export default function RootLayout({
         <OrganizationJsonLd />
         <SoftwareApplicationJsonLd />
         <WebsiteJsonLd />
-        <link rel="preload" as="image" href="/optimized/hero-background.webp" type="image/webp" />
         <link rel="preload" as="image" href="/optimized/feature.webp" type="image/webp" />
         <link rel="preload" as="image" href="/optimized/feature2.webp" type="image/webp" />
         <link rel="preload" as="image" href="/optimized/feature3.webp" type="image/webp" />

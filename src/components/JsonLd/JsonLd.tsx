@@ -4,7 +4,7 @@ const ORGANIZATION_ID = `${COMPANY.MARKETING_URL}/#organization`;
 const WEBSITE_ID = `${COMPANY.MARKETING_URL}/#website`;
 const SOFTWARE_ID = `${COMPANY.MARKETING_URL}/#software`;
 const PRODUCT_DESCRIPTION =
-	"Open-source desktop application and local CLI (ao) to run 10+ parallel AI coding agents in isolated Git worktrees without file conflicts or API proxying.";
+	"Private GPU fabric for on-prem open-weight models, plus Houdry Agent, the desktop app that talks to that fabric over the plant LAN.";
 
 function serializeJsonLd(schema: unknown): string {
 	const json = JSON.stringify(schema);
@@ -43,7 +43,7 @@ export function OrganizationJsonLd() {
 		"@id": ORGANIZATION_ID,
 		name: COMPANY.NAME,
 		url: COMPANY.MARKETING_URL,
-		logo: `${COMPANY.MARKETING_URL}/ao-logo.svg`,
+		logo: `${COMPANY.MARKETING_URL}/houdry-logo.png`,
 		description: PRODUCT_DESCRIPTION,
 		email: supportEmail,
 		contactPoint: {
@@ -60,7 +60,6 @@ export function OrganizationJsonLd() {
 		},
 		sameAs: [
 			COMPANY.GITHUB_URL,
-			"https://github.com/Untrivial-ai",
 			COMPANY.X_URL,
 			COMPANY.LINKEDIN_URL,
 		],
@@ -134,7 +133,7 @@ export function ArticleJsonLd({
 			name: COMPANY.NAME,
 			logo: {
 				"@type": "ImageObject",
-				url: `${COMPANY.MARKETING_URL}/ao-logo.svg`,
+				url: `${COMPANY.MARKETING_URL}/houdry-logo.png`,
 			},
 		},
 		datePublished: publishedTime,
@@ -188,7 +187,7 @@ export function ComparisonJsonLd({
 			name: COMPANY.NAME,
 			logo: {
 				"@type": "ImageObject",
-				url: `${COMPANY.MARKETING_URL}/ao-logo.svg`,
+				url: `${COMPANY.MARKETING_URL}/houdry-logo.png`,
 			},
 		},
 		datePublished: publishedTime,
@@ -249,10 +248,10 @@ export function ServiceJsonLd() {
 	const schema = {
 		"@context": "https://schema.org",
 		"@type": "Service",
-		name: `${COMPANY.NAME} agent orchestration`,
-		serviceType: "AI coding agent orchestration platform",
+		name: `${COMPANY.NAME} private GPU fabric`,
+		serviceType: "On-premise GPU fabric and desktop agent",
 		description:
-			"Run and orchestrate parallel AI coding agents (Claude Code, Codex, OpenCode, and any CLI agent) in isolated Git worktrees, with diff review, persistent terminals, scheduled automations, and an MCP server for programmatic control.",
+			"Houdry Fabric discovers and joins GPU workstations, routes inference to local models, and serves an OpenAI-compatible API. Houdry Agent is the end-user desktop app that talks to that fabric.",
 		provider: {
 			"@type": "Organization",
 			"@id": ORGANIZATION_ID,

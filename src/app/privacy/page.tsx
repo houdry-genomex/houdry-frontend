@@ -138,7 +138,7 @@ export default function PrivacyPage() {
               terminal contents, repository names, or file paths, and we never
               sell or rent data to anyone. The desktop app sends{" "}
               <Strong>anonymous, redacted usage telemetry</Strong> so we can tell
-              whether releases are stable — you can turn it off. Website analytics
+              whether releases are stable. You can turn it off. Website analytics
               stay off until you accept them. If you voluntarily join a
               waitlist or send us a testimonial, we process the details you
               submit only for the purpose described on that form. The mobile
@@ -177,23 +177,23 @@ export default function PrivacyPage() {
             </p>
             <Bullets>
               <Bullet>
-                <Strong>AO Mobile</Strong> — the companion app for iOS and
+                <Strong>AO Mobile</Strong>: the companion app for iOS and
                 Android that connects to an AO daemon you run yourself.
               </Bullet>
               <Bullet>
-                <Strong>The AO desktop app and CLI</Strong> — the local
+                <Strong>The AO desktop app and CLI</Strong>: the local
                 orchestrator that supervises coding agents in git worktrees on
                 your computer.
               </Bullet>
               <Bullet>
-                <Strong>aoagents.dev</Strong> — this website and the
+                <Strong>aoagents.dev</Strong>: this website and the
                 documentation hosted on it.
               </Bullet>
             </Bullets>
             <p>
               AO is not a hosted service. There is no AO account system and no
-              AO server that stores your work. Everything AO orchestrates —
-              repositories, worktrees, sessions, terminals, agent output — lives
+              AO server that stores your work. Everything AO orchestrates
+              (repositories, worktrees, sessions, terminals, agent output) lives
               on hardware you control.
             </p>
             <p>
@@ -231,8 +231,8 @@ export default function PrivacyPage() {
               </Bullet>
               <Bullet>
                 <Strong>Push notification token.</Strong> To deliver
-                notifications — for example when an agent is waiting for your
-                input — the app requests a push token from the platform and
+                notifications, for example when an agent is waiting for your
+                input, the app requests a push token from the platform and
                 registers it with <Strong>your own server</Strong>, so your
                 server can notify you. The token is not sent anywhere else.
               </Bullet>
@@ -258,7 +258,7 @@ export default function PrivacyPage() {
               <Strong>Apple Push Notification service (APNs)</Strong> on iOS or{" "}
               <Strong>Firebase Cloud Messaging (FCM)</Strong> on Android, which
               deliver it to your device. The payload contains only what is
-              needed to display and open the notification — a short title and
+              needed to display and open the notification: a short title and
               body, and identifiers such as a session or pull-request reference.
               No passwords, tokens, or secrets are included. These platform
               services process the message only to deliver it, under their own
@@ -276,8 +276,8 @@ export default function PrivacyPage() {
           <Section id="desktop" title="Desktop app and CLI">
             <p>
               The desktop app and CLI run entirely on your machine. All
-              application state — projects, worktrees, sessions, terminal
-              history, settings — is written under <Code>~/.ao</Code> on your
+              application state (projects, worktrees, sessions, terminal
+              history, settings) is written under <Code>~/.ao</Code> on your
               own disk and is never uploaded to us.
             </p>
             <p>
@@ -329,7 +329,7 @@ export default function PrivacyPage() {
               </Bullet>
             </Bullets>
             <p>
-              Events are sent as <Strong>anonymous</Strong> PostHog events — no
+              Events are sent as <Strong>anonymous</Strong> PostHog events: no
               person profiles are created and the app never calls{" "}
               <Code>identify()</Code>. A random install identifier generated on
               first run and stored at{" "}
@@ -343,7 +343,7 @@ export default function PrivacyPage() {
               <Strong>session recordings</Strong>. Session recording is disabled
               by default; if a time-boxed investigation enables it, local paths,
               local URLs, and network request names are masked before
-              transmission. It would cover the AO interface only — never other
+              transmission. It would cover the AO interface only: never other
               applications, never your desktop, and never keystroke content.
             </p>
 
@@ -454,18 +454,18 @@ export default function PrivacyPage() {
             </p>
             <Bullets>
               <Bullet>
-                <Strong>PostHog</Strong> — product analytics for the desktop
+                <Strong>PostHog</Strong>: product analytics for the desktop
                 app, CLI, and website, plus storage of voluntarily submitted
                 waitlist details (
                 <Ext href="https://posthog.com/privacy">privacy policy</Ext>).
               </Bullet>
               <Bullet>
-                <Strong>Expo Push Service</Strong> — relays mobile push
+                <Strong>Expo Push Service</Strong>: relays mobile push
                 notifications (
                 <Ext href="https://expo.dev/privacy">privacy policy</Ext>).
               </Bullet>
               <Bullet>
-                <Strong>Apple Push Notification service</Strong> — delivers
+                <Strong>Apple Push Notification service</Strong>: delivers
                 notifications on iOS (
                 <Ext href="https://www.apple.com/legal/privacy/">
                   privacy policy
@@ -473,7 +473,7 @@ export default function PrivacyPage() {
                 ).
               </Bullet>
               <Bullet>
-                <Strong>Firebase Cloud Messaging (Google)</Strong> — delivers
+                <Strong>Firebase Cloud Messaging (Google)</Strong>: delivers
                 notifications on Android (
                 <Ext href="https://policies.google.com/privacy">
                   privacy policy
@@ -481,7 +481,7 @@ export default function PrivacyPage() {
                 ).
               </Bullet>
               <Bullet>
-                <Strong>GitHub</Strong> — hosts the source code, releases, and
+                <Strong>GitHub</Strong>: hosts the source code, releases, and
                 this website (
                 <Ext href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">
                   privacy statement
@@ -489,7 +489,7 @@ export default function PrivacyPage() {
                 ).
               </Bullet>
               <Bullet>
-                <Strong>Mux</Strong> — serves the demo video on this site (
+                <Strong>Mux</Strong>: serves the demo video on this site (
                 <Ext href="https://www.mux.com/privacy">privacy policy</Ext>).
               </Bullet>
             </Bullets>
@@ -558,12 +558,12 @@ export default function PrivacyPage() {
             <p>
               Depending on where you live, you may have rights to access,
               correct, export, or delete personal data about you, and to object
-              to certain processing — for example under the GDPR or the
+              to certain processing: for example under the GDPR or the
               CCPA/CPRA.
             </p>
             <p>
               In practice, nearly all data AO touches is already in your own
-              hands: delete the app, delete <Code>~/.ao</Code>, and it is gone.
+              hands. Delete the app, delete <Code>~/.ao</Code>, and it is gone.
               For the anonymous telemetry, the most direct way to exercise
               control is to turn it off using the settings described above. If
               you submitted a waitlist email or believe we hold other data about
@@ -600,18 +600,18 @@ export default function PrivacyPage() {
             </p>
             <Bullets>
               <Bullet>
-                <Ext href={ISSUES_URL}>Open a GitHub issue</Ext> — the fastest
+                <Ext href={ISSUES_URL}>Open a GitHub issue</Ext>: the fastest
                 route, and the one we monitor.
               </Bullet>
               <Bullet>
-                <Ext href={DISCORD_URL}>Join the Discord</Ext> — for questions
+                <Ext href={DISCORD_URL}>Join the Discord</Ext>: for questions
                 that are not a bug report.
               </Bullet>
             </Bullets>
             <p className="text-muted-foreground">
               Agent Orchestrator is open-source software released under Apache
               2.0 and provided as-is. If this policy and the source code ever
-              disagree, the source code is the truth — and you are welcome to
+              disagree, the source code is the truth, and you are welcome to
               read it.
             </p>
           </Section>

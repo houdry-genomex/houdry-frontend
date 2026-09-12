@@ -1,0 +1,22 @@
+---
+title: Knowledge and SOPs
+description: Load plant documents and standing rules in Houdry Agent.
+---
+
+The agent should quote your procedures, not invent them.
+
+1. In Agent, open **Knowledge base**.
+2. Add the SOP PDF, previous approval notes, and equipment specs for this unit.
+3. On the SOP row, set **standing rules**, for example:
+
+```text
+Cite the SOP. Do not invent procedures. Nothing is sent off this network.
+Quote values from the source document. Leave gaps if the scan is unreadable.
+```
+
+4. Start a **session** for the job (one report, one drawing pack).
+5. Prompt with the document names as they appear in Knowledge.
+
+Files stay on the desk. Fabric only sees the text/images Agent sends in that turn, on the LAN `/v1` call.
+
+More: [Knowledge and files](/docs/configuration/projects).

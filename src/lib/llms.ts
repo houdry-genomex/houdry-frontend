@@ -1,6 +1,5 @@
 import { COMPANY } from "@ao/shared/constants";
 import { FAQ_ITEMS } from "@/app/components/FAQSection/constants";
-import { getComparisonPages } from "./compare";
 import { getDocPage, getDocsNav, type DocsNavItem } from "./docs";
 
 export function stripMdxSyntax(content: string): string {
@@ -21,9 +20,9 @@ export function buildLlmsHeader(): string[] {
 	return [
 		`# ${COMPANY.NAME}`,
 		"",
-		"> Open-source desktop application and local CLI (`ao`) to run 10+ parallel AI coding agents in isolated Git worktrees without file conflicts or API proxying.",
+		"> Private GPU fabric for on-prem open-weight models, plus Houdry Agent, the desktop app that talks to that fabric over the plant LAN.",
 		"",
-		`${COMPANY.NAME} is an open-source desktop application that lets developers run multiple AI coding agents in parallel, each in its own isolated Git worktree. It works with any CLI-based agent including Claude Code, OpenCode, and OpenAI Codex. Agents can work on different branches or features simultaneously without conflicts. ${COMPANY.NAME} is free, does not proxy API calls, and supports macOS, Windows, and Linux.`,
+		`${COMPANY.NAME} Fabric installs from GitHub Releases onto GPU workstations (\`houdry serve\`, \`houdry gpu register\`). ${COMPANY.NAME} Agent is the end-user desktop application. Work stays on your network. There is no cloud LLM API in the path.`,
 	];
 }
 
@@ -34,20 +33,19 @@ export function buildWhenToUseSection(
 ): string[] {
 	const documentationDirection = referenceDocumentationSection
 		? "To learn the product, use the Documentation section below."
-		: "To learn the product, start with the docs index at https://aoagents.dev/docs/.";
+		: `To learn the product, start with the docs index at ${COMPANY.DOCS_URL}.`;
 
 	return [
-		"## When to use Agent Orchestrator",
+		"## When to use Houdry",
 		"",
-		"Reach for Agent Orchestrator when you need to:",
+		"Reach for Houdry when you need to:",
 		"",
-		"- Run several coding agents (Claude Code, Codex, OpenCode, or any CLI agent) at the same time on one repository without them stepping on each other, each agent gets an isolated Git worktree and its own branch.",
-		"- Orchestrate agent work through the desktop app and local `ao` CLI: create workspaces, launch agents with a prompt, open terminals, and track tasks.",
-		"- Schedule recurring agent runs (automations) that execute a prompt on a cron-like schedule in a fresh or existing workspace.",
-		"- Automatically route CI failures and review feedback to the agent session that owns the branch, so the right agent can handle failures without manual babysitting.",
-		"- Review diffs, manage ports, and monitor many concurrent agent sessions from one dashboard.",
+		"- Run open-weight models on GPU workstations you already own, without sending documents off premises.",
+		"- Join those workstations into one fabric (`houdry serve` + `houdry gpu register`) that routes each request to the right (model, node) pair.",
+		"- Give operators Houdry Agent on the desk, pointed at `http://<fabric-host>:8080/v1`.",
+		"- Keep reports, drawings, and code on the plant LAN.",
 		"",
-		`Agent Orchestrator is not a coding agent itself; it is the local workspace and orchestration layer the agents run in. If you are an AI agent inside an AO-managed session, use the installed \`ao\` CLI. ${documentationDirection}`,
+		`Houdry Fabric is the GPU control plane. Houdry Agent is the desktop client. ${documentationDirection}`,
 	];
 }
 
@@ -65,10 +63,10 @@ export function buildDeveloperResourcesSection(
 			? [
 					`- [Documentation](${docsUrl}/): product and workflow documentation`,
 					`- [Quickstart](${docsUrl}/quickstart/): install and first-run guide`,
-					`- [CLI](${docsUrl}/cli/): local \`ao\` command reference`,
+					`- [CLI](${docsUrl}/cli/): \`houdry\` fabric commands`,
 				]
 			: []),
-		`- [Agent instructions](${baseUrl}/agents.md): when and how AI agents should use Agent Orchestrator`,
+		`- [Agent instructions](${baseUrl}/agents.md): when and how AI agents should use Houdry`,
 		`- [Blog llms.txt](${baseUrl}/blog/llms.txt): scoped index of blog posts`,
 		`- [GitHub](${COMPANY.GITHUB_URL}): source code and releases`,
 	];
@@ -123,7 +121,6 @@ export function buildDocumentationSection(): string[] {
 }
 
 export function buildLlmsTxt(): string {
-	const comparisons = getComparisonPages();
 	const baseUrl = COMPANY.MARKETING_URL;
 
 	const lines: string[] = [
@@ -132,15 +129,13 @@ export function buildLlmsTxt(): string {
 		...buildWhenToUseSection({ referenceDocumentationSection: true }),
 		"",
 		...buildDeveloperResourcesSection({ includeDocumentationLinks: false }),
-		`- [Full LLM context](${baseUrl}/llms-full.txt): combined AO overview, developer resources, comparisons, and FAQ`,
+		`- [Full LLM context](${baseUrl}/llms-full.txt): combined Houdry overview, documentation index, and FAQ`,
 		"",
 		...buildDocumentationSection(),
 		"",
 		"## Comparisons",
 		"",
-		...comparisons.map(
-			(page) => `- [${page.title}](${baseUrl}/compare/${page.slug}/)`,
-		),
+		"Houdry is Fabric plus Agent. It is not a coding-agent worktree product. Ignore leftover `/compare/ao-vs-*` URLs if they still exist on this host.",
 		"",
 		"## FAQ",
 		"",

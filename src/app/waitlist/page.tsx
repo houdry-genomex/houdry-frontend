@@ -13,7 +13,7 @@ const notes = [
   {
     icon: Cloud,
     label: "Hosted runs",
-    text: "Run longer jobs on cloud capacity instead of one laptop.",
+    text: "Run longer jobs on extra GPU workstations in the fabric.",
   },
   {
     icon: Handshake,

@@ -1,15 +1,12 @@
 ---
-title: Runtime
-description: AO automatically uses tmux on macOS/Linux and ConPTY on Windows.
+title: Moved
+description: This page is not part of Houdry Fabric or Houdry Agent.
 ---
 
-The runtime owns a Terminal UI process and exposes attach, interrupt, messaging, output, and liveness operations to the daemon. It is selected by platform, not by project configuration.
+This URL belonged to an older coding-agent product. Use the Houdry docs instead.
 
-| Platform | Runtime | Requirement |
-| --- | --- | --- |
-| macOS / Linux | [tmux](/docs/plugins/runtimes/tmux) | Install `tmux`. |
-| Windows | ConPTY | Built into supported Windows versions. |
-
-Structured Chat sessions use provider controllers instead of an agent terminal runtime. They can still open a separate session-scoped worktree shell in the desktop app.
-
-Run `ao doctor` to check the runtime required on the current platform.
+<Cards>
+	<Card title="What Houdry is" href="/docs" description="Fabric on GPUs. Agent on the desk." />
+	<Card title="Installation" href="/docs/installation" description="Release install commands." />
+	<Card title="Houdry Agent" href="/docs/dashboard" description="Sessions and knowledge." />
+</Cards>

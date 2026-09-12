@@ -4,7 +4,11 @@ export const COMPANY = {
   MARKETING_URL: "https://houdry.example.com",
   DOCS_URL: "https://houdry.example.com/docs",
   GITHUB_URL: "https://github.com/houdry-genomex/",
-  GITHUB_REPO: "Untrivial-ai/agent-orchestrator",
+  GITHUB_REPO: "houdry-genomex/houdry-agent",
+  GITHUB_FABRIC_REPO: "houdry-genomex/houdry",
+  GITHUB_AGENT_REPO: "houdry-genomex/houdry-agent",
+  GITHUB_FABRIC_URL: "https://github.com/houdry-genomex/houdry",
+  GITHUB_AGENT_URL: "https://github.com/houdry-genomex/houdry-agent",
   STATUS_URL: "https://houdry.example.com/status",
   TRUST_URL: "https://houdry.example.com/privacy/",
   MAIL_TO: "mailto:team@houdry.example.com",
@@ -13,9 +17,9 @@ export const COMPANY = {
   LINKEDIN_URL: "https://www.linkedin.com/company/agent-orchestrator/",
   DISCORD_URL: "https://discord.com/invite/UZv7JjxbwG",
   FOUNDERS_EMAIL: "team@houdry.example.com",
-  REPORT_ISSUE_URL: "https://github.com/Untrivial-ai/agent-orchestrator/issues/new",
-  LICENSE: "Apache-2.0",
-  LICENSE_URL: "https://github.com/Untrivial-ai/agent-orchestrator/blob/main/LICENSE",
+  REPORT_ISSUE_URL: "https://github.com/houdry-genomex/houdry-agent/issues/new",
+  LICENSE: "MIT",
+  LICENSE_URL: "https://github.com/houdry-genomex/houdry-agent/blob/main/LICENSE",
 } as const;
 
 export const THEME_STORAGE_KEY = "ao-theme";
@@ -29,29 +33,28 @@ export const PLATFORMS = {
   LINUX: "linux",
 } as const;
 
-export const GITHUB_STARS_URL = "https://api.github.com/repos/Untrivial-ai/agent-orchestrator";
+export const GITHUB_STARS_URL =
+  "https://api.github.com/repos/houdry-genomex/houdry";
 
-// macOS points at the .dmg: this is rollout step 6 of issue #3267, taken once the
-// release conductor started publishing a signed, notarized dmg on the stable
-// channel. Mounting it gives the drag-to-Applications window, so the app lands in
-// /Applications instead of being unzipped into ~/Downloads and launched from
-// there, which is what leaves macOS running it translocated or as a stale copy
-// (#3617, #3527).
-//
-// The .zip keeps publishing forever regardless: MacUpdater can only install an
-// update from a zip (findFile(files, "zip", ["pkg", "dmg"])), so the dmg is
-// first-install only and never replaces it.
-//
-// These are static releases/latest/download links, so they 404 until a release
-// actually carries the asset. Only the STABLE channel builds a dmg; if the links
-// ever break, check that the newest non-prerelease release has both files rather
-// than assuming the pipeline is broken. The download page itself is resilient
-// here: it reads the live release list and falls back to the zip.
-// Houdry: downloads are intentionally inert for now (no public release yet).
-export const DOWNLOAD_URL_MAC_ARM64 = "#";
-export const DOWNLOAD_URL_MAC_X64 = "#";
-export const DOWNLOAD_URL_WINDOWS = "#";
-export const DOWNLOAD_URL_LINUX = "#";
+const FABRIC_LATEST =
+  "https://github.com/houdry-genomex/houdry/releases/latest/download";
+
+export const FABRIC_RELEASES_URL =
+  "https://github.com/houdry-genomex/houdry/releases/latest";
+export const AGENT_RELEASES_URL =
+  "https://github.com/houdry-genomex/houdry-agent/releases/latest";
+
+export const FABRIC_INSTALL_SH = `${FABRIC_LATEST}/install.sh`;
+export const FABRIC_INSTALL_PS1 = `${FABRIC_LATEST}/install.ps1`;
+export const FABRIC_INSTALL_UNIX = `curl -fsSL ${FABRIC_INSTALL_SH} | sh`;
+export const FABRIC_INSTALL_WINDOWS = `irm ${FABRIC_INSTALL_PS1} | iex`;
+export const AGENT_INSTALL_UNIX =
+  "curl -fsSL https://raw.githubusercontent.com/houdry-genomex/houdry-agent/main/scripts/install.sh | bash";
+
+export const DOWNLOAD_URL_MAC_ARM64 = `${FABRIC_LATEST}/houdry-darwin-arm64`;
+export const DOWNLOAD_URL_MAC_X64 = `${FABRIC_LATEST}/houdry-darwin-amd64`;
+export const DOWNLOAD_URL_WINDOWS = `${FABRIC_LATEST}/houdry-windows-amd64.exe`;
+export const DOWNLOAD_URL_LINUX = `${FABRIC_LATEST}/houdry-linux-amd64`;
 
 // AO Mobile. iOS ships as a TestFlight beta — the same link the desktop app's
 // Connect Mobile panel opens (frontend/src/renderer/components/settings/
@@ -71,8 +74,10 @@ export const ANDROID_TEST_OPT_IN_URL =
 
 export const AGENT_HARNESSES = 3;
 export const TAGLINE = "Stop mailing data out. Start working air-gapped.";
-export const HERO_SUBHEADLINE = "Run open-weight AI on your own GPU server while reports, drawings, and code never leave the premises.";
-export const HERO_SECONDARY_SUBHEADLINE = "Local models via Ollama for documents, drawings, and code. Every deliverable from one workbench. Zero external calls, provably.";
+export const HERO_SUBHEADLINE =
+  "Houdry Fabric runs on your GPU workstations. Houdry Agent is the app on each desk. Open-weight models stay on the plant LAN.";
+export const HERO_SECONDARY_SUBHEADLINE =
+  "Install the fabric from GitHub Releases, register each GPU workstation, then point Houdry Agent at the control plane. Zero external LLM calls.";
 
 export const NAV_ITEMS = [
   { label: "Demo", href: "/#see-it" },

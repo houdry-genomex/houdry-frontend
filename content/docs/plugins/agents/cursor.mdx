@@ -1,15 +1,12 @@
 ---
-title: Cursor
-description: Built-in Terminal UI support for the Cursor Agent CLI.
+title: Moved
+description: This page is not part of Houdry Fabric or Houdry Agent.
 ---
 
-AO's Cursor adapter resolves the Cursor Agent CLI from your machine and checks its local readiness through the agent catalog.
+This URL belonged to an older coding-agent product. Use the Houdry docs instead.
 
-```bash
-ao agent ls --refresh
-ao spawn --project my-app --name cursor-task --agent cursor --mode tui
-```
-
-Cursor is currently Terminal UI-only; requesting `--mode chat` fails with an unsupported-Chat error rather than silently creating a different interface.
-
-AO records activity through the adapter's supported hooks and terminal signals. There is no Cursor npm plugin or `agent-orchestrator.yaml` block to install.
+<Cards>
+	<Card title="What Houdry is" href="/docs" description="Fabric on GPUs. Agent on the desk." />
+	<Card title="Installation" href="/docs/installation" description="Release install commands." />
+	<Card title="Houdry Agent" href="/docs/dashboard" description="Sessions and knowledge." />
+</Cards>

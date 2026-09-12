@@ -1,65 +1,52 @@
 ---
-title: Introduction
-description: Learn what Agent Orchestrator does, when to use it, and where to start.
+title: What Houdry is
+description: Private GPU fabric plus a desktop agent. Work stays on your network.
 ---
 
-Agent Orchestrator (**AO**) is a desktop IDE for supervising AI coding agents. It gives workers isolated workspaces, keeps each conversation or terminal available, and connects Git-project work to pull requests, CI, reviews, and merge conflicts.
+Houdry is **two products**. They are not interchangeable.
 
-The agents still write the code. AO provides the control layer around them: projects, sessions, workspaces, status, follow-up messages, review runs, notifications, and browser previews in one place.
+| Product | Where it runs | What the user sees |
+| --- | --- | --- |
+| **Houdry Fabric** | GPU / ops workstation | A CLI: `houdry serve`, `houdry gpu register`. Dashboard at `http://host:8080/` |
+| **Houdry Agent** | Desk (laptop or PC) | The chat app. Sessions, knowledge, SOPs. Talks to Fabric at `…:8080/v1` |
 
-<Callout type="info" title="Fastest path">
-	Download the desktop app, add a repository, and start one small session. See [Installation](/docs/installation), then [Quickstart](/docs/quickstart).
+Fabric owns the GPUs and the models. Agent owns the people and the files. There is no cloud LLM API in the path.
+
+<Callout type="info" title="If you only remember one thing">
+	Install Fabric on the machine with the GPU. Install Agent on the desk. Point Agent at `http://<fabric-host>:8080/v1`. Do not put Fabric on every laptop.
 </Callout>
 
-## What AO Helps You Do
+## Which page should I open?
 
-- Run several coding agents without mixing their files, branches, or pull requests.
-- Choose a native terminal UI or structured Chat for each session.
-- Follow activity, CI, review feedback, and merge readiness from the desktop app.
-- Send follow-up instructions to the right worker.
-- Run reviewer agents and route requested changes back to the worker.
-- Preview a session's local app beside its Chat or terminal.
-- Check and respond from the companion mobile app on your home network.
+- **Ops / GPU owner** → [Installation](/docs/installation), then keep `houdry serve` and `houdry gpu register` running.
+- **Everyone else on the desk** → [Installation](/docs/installation) (Agent only), then [Houdry Agent](/docs/dashboard).
+- **First time, both machines in front of you** → [Quickstart](/docs/quickstart).
+- **Chat failed** → [Troubleshooting](/docs/troubleshooting).
 
-AO works best when each worker has a clear, reviewable outcome: a focused bug, feature, refactor, test, documentation update, or review follow-up.
-
-## The Basic Loop
+## What a working plant looks like
 
 ```text
-add project -> start session -> isolated worktree -> pull request -> CI/review -> merge -> cleanup
+Desk                                  GPU workstation
+────                                  ───────────────
+Houdry Agent                          Ollama  (models)
+  Knowledge, SOPs, chat                 houdry serve     :8080
+  POST /v1/chat/completions             houdry gpu register  (leave this running)
 ```
 
-You can create sessions from the desktop app or the optional CLI. AO launches the selected agent interface, observes durable activity and pull-request facts, and derives the status shown in the UI.
+End users never talk to the GPU process. They talk to the control plane. The control plane picks a `(model, node)` pair (`model=auto`).
 
-## Chat And Terminal UI
+## What you can do once it is connected
 
-Every session has one active agent interface at a time:
+- Ask questions against SOPs, inspection reports, and manuals that stay on this computer.
+- Draft approval notes and registers from files that never leave the premises.
+- Send drawings / scans; Fabric routes vision work to a vision-capable local model when one is loaded.
+- Add another GPU workstation with `houdry gpu register`. Agent does not need a reinstall.
 
-| Interface | Best for |
-| --- | --- |
-| **Chat** | Structured messages, activities, approvals, plans, usage, and conversation history. |
-| **Terminal UI** | The agent harness's native interactive terminal experience. |
-
-Chat is currently available for installed Codex, Claude Code, OpenCode, and Droid harnesses. Compatible Claude Code and Codex sessions can switch between Chat and Terminal UI without changing the AO session or worktree.
-
-## Local By Design
-
-The desktop app runs a Go daemon on `127.0.0.1` and communicates with it over a local API. Durable product state, Electron data, and worktree metadata live under `~/.ao` by default. Your agent CLIs and source-control credentials remain your own; AO does not bundle provider CLIs.
-
-Connect Mobile is a separate, opt-in home-network listener protected by a connection password. It is off until you enable it in the desktop app.
-
-## Supported Agents
-
-AO includes adapters for more than twenty agent harnesses, including Claude Code, Codex, Cursor, Aider, OpenCode, Droid, Kimi Code, GitHub Copilot, and others. Native Chat support is a smaller capability-gated subset; other harnesses use Terminal UI.
-
-GitHub is the currently shipped source-control observation path. Broader tracker and SCM integrations described in older AO documentation are not all available in the current daemon rewrite.
-
-## Where To Go Next
+## Next
 
 <Cards>
-	<Card title="Installation" description="Download the desktop app and connect your tools." href="/docs/installation" />
-	<Card title="Quickstart" description="Run one worker session from task to pull request." href="/docs/quickstart" />
-	<Card title="Dashboard" description="Learn the desktop board, session view, Chat, terminal, and inspector." href="/docs/dashboard" />
-	<Card title="Architecture" description="Understand the Go daemon, Electron app, storage, and session modes." href="/docs/architecture" />
-	<Card title="Troubleshooting" description="Resolve common desktop, daemon, agent, and session problems." href="/docs/troubleshooting" />
+	<Card title="Installation" description="Fabric on the GPU. Agent on the desk." href="/docs/installation" />
+	<Card title="Quickstart" description="Serve, register, connect, first chat." href="/docs/quickstart" />
+	<Card title="Houdry Agent" description="Sessions, knowledge, and the desktop app." href="/docs/dashboard" />
+	<Card title="Architecture" description="Control plane, GPU nodes, and Agent." href="/docs/architecture" />
 </Cards>

@@ -1,14 +1,14 @@
 ---
-title: "Agent Orchestrator 0.11.0 — The Floor"
-description: "271 commits and 270 merged PRs later, from 49 authors. The difference isn't a rewrite stacked on a rewrite — it's that the foundation finally holds weight, and the app grew outward on top of it."
+title: "Agent Orchestrator 0.11.0: The Floor"
+description: "271 commits and 270 merged PRs later, from 49 authors. The difference isn't a rewrite stacked on a rewrite. It's that the foundation finally holds weight, and the app grew outward on top of it."
 date: "2026-07-26"
 ---
 
 > Covers everything since **v0.10.0**. If you are on 0.10.3, you already have part of this.
 
-v0.10.0 was the first release after a ground-up rewrite — Go daemon, tmux session layer, Electron shell. It worked, mostly. But a rewrite's first release is a promise, not a product.
+v0.10.0 was the first release after a ground-up rewrite: Go daemon, tmux session layer, Electron shell. It worked, mostly. But a rewrite's first release is a promise, not a product.
 
-0.11.0 is 271 commits and 270 merged PRs later, from 49 authors. The difference isn't a rewrite stacked on a rewrite. It's that the foundation finally holds weight — and the app grew outward on top of it.
+0.11.0 is 271 commits and 270 merged PRs later, from 49 authors. The difference isn't a rewrite stacked on a rewrite. It's that the foundation finally holds weight, and the app grew outward on top of it.
 
 ---
 
@@ -22,13 +22,13 @@ The mobile companion app went from a port to a shipping surface. Pair a phone to
 
 Agents render Markdown and drive an embedded browser preview. Annotate directly inside it to point an agent at a specific UI element, and localhost links clicked in a terminal open there instead of bouncing you out of the app. (#2455, #2548, #2610, #3085)
 
-### Feature Releases — install any open PR
+### Feature Releases: install any open PR
 
 Every PR can now produce its own installable prerelease build, so testing an in-flight change means installing a real app rather than doing a checkout. Gated behind a new **Developer Mode** toggle so the channel picker stays out of the way for everyone else. (#2459, #3039)
 
 ### GitHub issue intake
 
-Projects can auto-start a worker session per assigned GitHub issue — polling, dedupe, pagination and per-project backoff — configured under **Tracker Intake** in project settings and the create-project flow. (#2325)
+Projects can auto-start a worker session per assigned GitHub issue (polling, dedupe, pagination and per-project backoff), configured under **Tracker Intake** in project settings and the create-project flow. (#2325)
 
 ### Workspace files, and a diff viewer that parses
 
@@ -36,7 +36,7 @@ A new inspector panel browses a session's workspace files. The Changes view now 
 
 ### Standalone shell terminals
 
-Open a plain terminal not bound to any agent session — scoped per session, renameable, with a right-click context menu, drag-a-file-to-insert-path, and sane tab overflow. (#2828, #2861, #2948, #2644, #3019, #3077)
+Open a plain terminal not bound to any agent session, scoped per session, renameable, with a right-click context menu, drag-a-file-to-insert-path, and sane tab overflow. (#2828, #2861, #2948, #2644, #3019, #3077)
 
 ### Keyboard-first navigation
 
@@ -47,7 +47,7 @@ Experimental Cmd/Ctrl+K command palette wired into sidebar search, a spawn short
 - Paste, drag-drop or attach **images** directly into a task brief (#2722, #2907)
 - **Restart-to-update** row with per-channel escalation, a revamped Updates screen, and a fix so the desktop app performs background update checks at all (#2381, #2709, #2939)
 - **CLI**: `ao agent ls` with install and auth status, `ao spawn` resolving project context instead of demanding `--project`, `--kind worker|orchestrator`, `ao review stop|restart`, `ao pr` (#2371, #2416, #2669, #2673, #3043)
-- **Settings and first run** rebuilt — redesigned settings with the PR board folded into the per-session inspector, onboarding replacing four empty kanban columns, and a first-run scratch project so there's somewhere to try AO immediately (#2432, #2797, #2952, #2348)
+- **Settings and first run** rebuilt: redesigned settings with the PR board folded into the per-session inspector, onboarding replacing four empty kanban columns, and a first-run scratch project so there's somewhere to try AO immediately (#2432, #2797, #2952, #2348)
 - Renderer moved to a **token-based design system** (~1.4k lines of legacy CSS removed), followed by a unified framed desktop shell across macOS, Windows and Linux (#2535, #2937, #2997)
 
 ---
@@ -84,7 +84,7 @@ Docs and the landing site now deploy to [aoagents.dev](https://aoagents.dev) via
 
 ## Upgrading
 
-GitHub Releases and Homebrew are the supported install paths; the npm package is frozen. Existing installs should update in place — the migration ordering fixes in this release specifically target the "it broke after updating" class of failure.
+GitHub Releases and Homebrew are the supported install paths; the npm package is frozen. Existing installs should update in place. The migration ordering fixes in this release specifically target the "it broke after updating" class of failure.
 
 ---
 

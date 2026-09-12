@@ -1,212 +1,106 @@
 ---
 title: CLI reference
-description: Commands provided by the current Go CLI.
+description: houdry: control plane, GPU nodes, routing, and jobs.
 ---
 
-The `ao` CLI is a thin client for the local AO desktop app and its loopback daemon. Product commands require the desktop app to be running. Run `ao <command> --help` for the exact flags supported by your installed version.
+The `houdry` binary is **Houdry Fabric**. It is what you install on GPU workstations. Houdry Agent is a separate desktop app; it is not this CLI.
 
-## Command tree
+After [Installation](/docs/installation):
+
+```bash
+export PATH="$HOME/.houdry/bin:$PATH"   # Windows: $HOME\.houdry\bin
+houdry version
+```
+
+Set `HOODRY_SERVER` (and optional `HOODRY_TOKEN`) so you do not pass `--server` on every command. Config lives in `~/.houdry`.
+
+## Everyday
+
+These four commands are the whole GPU-host job:
 
 ```text
-ao
-├── start                         Open the desktop app (download it when needed)
-├── stop                          Stop the local daemon
-├── status                        Show daemon health
-├── doctor                        Check the local AO environment
-├── agent ls                      List built-in agent adapters and readiness
-├── project                       add, ls, get, set-config, rm
-├── spawn                         Create a worker or orchestrator session
-├── session                       ls, get, kill, restore, rename, cleanup, claim-pr,
-│                                 switch-agent, agent-switch
-├── orchestrator ls               List orchestrator sessions
-├── send                           Send a message to a session
-├── pr                             merge, resolve-comments
-├── review                         ls, trigger, cancel, submit
-├── preview                        select/clear a target; start, status, stop a server
-├── browser                        Control the selected session browser
-├── import                         Import projects from legacy AO data
-├── completion                     Generate shell completions
-└── version                        Print build information
+houdry gpu detect
+houdry gpu register [--server URL] [--token TOKEN]
+houdry serve [--listen ADDR] [--token TOKEN] [--no-lan-discover]
+houdry discover
 ```
 
-Internal commands such as `daemon`, `hooks`, `launch`, `agent-process`, and `pty-host` are intentionally omitted.
-
-## Desktop and daemon
-
-### `ao start`
-
-Opens the installed Agent Orchestrator desktop app. If no app is installed, the legacy launcher can fetch the latest desktop release first. It does not supervise the daemon itself.
-
-| Flag | Purpose |
+| Command | Meaning |
 | --- | --- |
-| `--json` | Print the launch result as JSON. |
+| `gpu detect` | List GPUs on this machine (`--json` for scripts). |
+| `gpu register` | Join the fabric and **stay running**. Same as `node join`. |
+| `serve` | Control plane + dashboard. Default listen `0.0.0.0:8080`. |
+| `discover` | See control planes announced on this Wi‑Fi. |
+| `gpu join` | One-shot inventory snapshot. **Does not run jobs.** Use `gpu register`. |
+| `version` | Print the installed Fabric version. |
 
-For a new installation, download the desktop app from the [installation guide](/docs/installation). The frozen npm package is a legacy launcher, not the current distribution channel.
+Leave `gpu register` running. Ctrl+C drains, waits for the current job, then leaves.
 
-### `ao stop`
+## Cluster
 
-Asks the loopback daemon to shut down after checking that the run file identifies AO.
+```text
+houdry node list
+houdry node drain
+houdry node leave
+houdry gpu list
+houdry model list
+houdry model catalog
+```
 
-| Flag | Purpose |
-| --- | --- |
-| `--timeout <duration>` | Maximum time to wait for shutdown. |
-| `--json` | Print the result as JSON. |
+## Jobs and routing
 
-### `ao status`
+```text
+houdry job submit gpu.smoke [--wait]
+houdry job submit inference --model NAME --prompt TEXT [--wait]
+houdry job list
+houdry job get JOB_ID
+houdry route --prompt TEXT [--execute] [--wait]
+houdry route --local "Say hello"
+houdry route --interactive
+```
 
-Reports daemon state, process identity, run-file location, health, and readiness. This command does not list sessions.
+`houdry route --local` benches Ollama on this machine and does not start a second HTTP server. Chat from Agent always goes through `houdry serve`.
 
-| Flag | Purpose |
-| --- | --- |
-| `--json` | Print structured daemon status. |
+## OpenAI-shaped API
 
-Use `ao session ls` for sessions.
+Agent and any OpenAI SDK use:
 
-### `ao doctor`
+```text
+POST http://<host>:8080/v1/chat/completions
+```
 
-Checks AO configuration, the data directory and database, daemon state, Git, GitHub authentication, and the platform runtime (`tmux` on macOS/Linux; ConPTY is built into Windows).
-
-| Flag | Purpose |
-| --- | --- |
-| `--json` | Print checks as JSON. |
-
-## Projects and agents
-
-### `ao agent ls`
-
-Lists the daemon's built-in agent catalog together with local installation and authentication readiness.
-
-| Flag | Purpose |
-| --- | --- |
-| `--refresh` | Rerun bounded local install/auth probes. |
-| `--json` | Print the raw inventory response. |
-
-Agent adapters are compiled into AO. There is no plugin marketplace or `ao plugin install` command.
-
-### `ao project`
-
-| Command | Purpose |
-| --- | --- |
-| `ao project add` | Register a local Git repository or multi-repository workspace. Scratch is an AO-managed built-in project. |
-| `ao project ls` | List registered projects. |
-| `ao project get <id>` | Show one project and its resolved configuration. |
-| `ao project set-config <id>` | Update typed per-project configuration. |
-| `ao project rm <id>` | Remove a project registration. |
-
-Project configuration is persisted by the daemon in SQLite. `set-config` supports common flags and `--config-json`; it does not edit `agent-orchestrator.yaml`. Use command help for the complete typed fields.
-
-## Sessions
-
-### `ao spawn`
-
-Creates a session in a registered project. The command takes no positional arguments and requires a display name.
+`model=auto` runs the router. A named model pins that model. `GET /.well-known/houdry.json` identifies a discovered host.
 
 ```bash
-ao spawn --name fix-login --project my-app --agent codex --prompt "Fix the login regression"
+curl http://127.0.0.1:8080/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d "{\"model\":\"auto\",\"messages\":[{\"role\":\"user\",\"content\":\"Say hello\"}]}"
 ```
 
-Important flags include:
+Pass `--token` on `serve` to require `X-Houdry-Token` or `Authorization: Bearer`.
 
-| Flag | Purpose |
+Useful paths on the same host:
+
+| Path | Role |
 | --- | --- |
-| `--name <name>` | Required sidebar name, at most 20 characters. |
-| `--project <id>` | Project to use. Otherwise AO resolves environment and current directory context. |
-| `--agent`, `--harness <name>` | Override the project's agent. The two names are aliases. |
-| `--kind worker\|orchestrator` | Select the session role. |
-| `--mode chat\|tui` | Select structured Chat or the agent's native terminal UI. |
-| `--branch <name>` | Branch for Git projects. Scratch projects do not support it. |
-| `--prompt <text>` | Initial prompt. |
-| `--issue <id>` | Associate a tracker issue. |
-| `--claim-pr <ref>` | Claim an existing pull request after spawning. |
-| `--no-takeover` | Refuse a PR already owned by another active session. |
-| `--skip-agent-check` | Skip only the CLI-side install/auth preflight. |
+| `GET /` | Cluster dashboard |
+| `GET /healthz` | Liveness |
+| `GET /.well-known/houdry.json` | LAN identity (no token) |
+| `POST /v1/chat/completions` | Chat |
+| `GET /v1/models` | Model list |
+| `GET /files/` | Generated artifacts |
 
-Project resolution order is explicit `--project`, `AO_PROJECT_ID`, the project of `AO_SESSION_ID`, then the closest registered project containing the current directory. Before spawning, AO refreshes the selected agent's advisory readiness unless `--skip-agent-check` is set.
+## Windows notes
 
-### `ao session`
-
-| Command | Purpose |
-| --- | --- |
-| `ao session ls` | List active worker sessions. Use `--all` for orchestrators and `--include-terminated` for history. |
-| `ao session get <id>` | Show one session. |
-| `ao session kill <id>` | Terminate a session. Dirty workspaces are preserved. |
-| `ao session restore <id>` | Relaunch a terminated session. |
-| `ao session rename <id> <name>` | Change its display name. |
-| `ao session cleanup` | Reclaim eligible terminated workspaces; supports `--dry-run`. |
-| `ao session claim-pr [<session-id>] <pr-ref>` | Attach an existing PR; omitting the session uses `AO_SESSION_ID`. |
-| `ao session switch-agent <id> <target-harness>` | Switch a compatible session to another harness. |
-| `ao session agent-switch ls <session-id>` | Inspect agent-switch attempts. |
-
-Most lookup commands accept `--project` to disambiguate a session ID.
-
-### `ao send`
-
-Sends a message through the daemon to a running session.
-
-```bash
-ao send --session ao-123 --message "Please address the failing test"
+```powershell
+irm https://github.com/houdry-genomex/houdry/releases/latest/download/install.ps1 | iex
+& "$HOME\.houdry\bin\houdry.exe" gpu detect
+& "$HOME\.houdry\bin\houdry.exe" serve --listen 0.0.0.0:8080
 ```
 
-Both flags are required. When called from a session with `AO_SESSION_ID`, AO prefixes the sender identity.
+## Next
 
-### `ao orchestrator ls`
-
-Lists orchestrator sessions. Add `--json` for structured output.
-
-## Pull requests and reviews
-
-| Command | Purpose |
-| --- | --- |
-| `ao pr merge <pr-number>` | Request a merge through AO's GitHub action engine. |
-| `ao pr resolve-comments <pr-number> [comment-id...]` | Resolve selected or eligible review comments. |
-| `ao review ls <worker-session-id>` | List review state for a worker. |
-| `ao review trigger [worker-session-id]` | Start or restart a reviewer run. Aliases: `execute`, `restart`. |
-| `ao review cancel [worker-session-id]` | Cancel a reviewer run. Alias: `stop`. |
-| `ao review submit [worker-session-id]` | Submit a reviewer verdict and results. |
-
-Use each subcommand's help for required review-run IDs, verdict values, and file/stdin inputs.
-
-## Preview and browser control
-
-### `ao preview [url]`
-
-Selects what the desktop Browser panel displays for the session identified by `AO_SESSION_ID`. With no argument AO looks for a supported static entry point in the session workspace; with a file or `file:`, `http:`, or `https:` target it opens that target.
-
-| Command | Purpose |
-| --- | --- |
-| `ao preview clear` | Clear the selected preview. |
-| `ao preview start [configuration]` | Start exactly one command from `.ao/launch.json`, wait for readiness, and select it. |
-| `ao preview status` | Show the managed preview process and recent bounded logs. |
-| `ao preview stop` | Stop the managed process tree. |
-
-`.ao/launch.json` is optional project configuration. AO does not infer or scaffold development servers, and static files do not require one.
-
-### `ao browser`
-
-Controls the live, session-isolated Electron browser owned by the desktop app. It also resolves its target from `AO_SESSION_ID`; the desktop app must be open.
-
-The command family includes status/open, accessibility snapshots and references, click/drag/fill/type/press/hover, highlight, scroll, select/check state, property reads, tabs and popups, DevTools, frames, dialogs, waits, screenshots, console/page errors, and bounded opt-in network metadata capture.
-
-References become stale after navigation, DOM replacement, frame changes, or tab changes. Take another snapshot when AO reports `STALE_REFERENCE`. Network capture is off by default, metadata-only, bounded, and automatically expires.
-
-## Migration and shell integration
-
-| Command | Purpose |
-| --- | --- |
-| `ao import` | Import legacy projects from `~/.agent-orchestrator`; supports `--dry-run`, `--yes`, and `--json`. Unsupported legacy plugin settings are reported as dropped. |
-| `ao completion bash\|zsh\|fish\|powershell` | Generate a shell completion script. |
-| `ao version` / `ao --version` | Print build metadata. |
-
-## Environment
-
-| Variable | Default | Purpose |
-| --- | --- | --- |
-| `AO_PORT` | `3001` | Loopback daemon port. |
-| `AO_RUN_FILE` | `~/.ao/running.json` | Daemon identity and port handshake. |
-| `AO_DATA_DIR` | `~/.ao/data` | Daemon data directory. |
-| `AO_REQUEST_TIMEOUT` | `60s` | REST request timeout. |
-| `AO_SHUTDOWN_TIMEOUT` | `10s` | Graceful shutdown limit. |
-| `AO_SESSION_ID` | unset | Current session context for preview, browser, and in-session calls. |
-| `AO_PROJECT_ID` | unset | Current project context for spawn resolution. |
-
-All current AO application state stays under `~/.ao` unless `AO_DATA_DIR` or `AO_RUN_FILE` overrides it.
+<Cards>
+	<Card title="Architecture" href="/docs/architecture" description="Serve vs register vs Agent." />
+	<Card title="Troubleshooting" href="/docs/troubleshooting" description="Discover, detect, register." />
+</Cards>

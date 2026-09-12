@@ -10,7 +10,7 @@ import { FaApple } from "react-icons/fa";
 const STEPS = [
   {
     title: "Install TestFlight",
-    body: "Apple distributes betas through its TestFlight app. Get it from the App Store first — the invite link does nothing without it.",
+    body: "Apple distributes betas through its TestFlight app. Get it from the App Store first. The invite link does nothing without it.",
   },
   {
     title: "Scan to install AO Mobile",

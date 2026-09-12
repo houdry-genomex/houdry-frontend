@@ -1,25 +1,23 @@
 {
 	"title": "Docs",
 	"pages": [
-		"---Getting Started---",
+		"---Getting started---",
 		"index",
 		"installation",
 		"quickstart",
+		"---How Houdry works---",
+		"architecture",
 		"platforms",
-		"---Using AO---",
+		"---Using Houdry---",
 		"dashboard",
 		"examples",
 		"guides",
-		"---Built-in capabilities---",
-		"plugins",
 		"---Reference---",
 		"cli",
 		"configuration",
-		"architecture",
 		"---Help---",
 		"troubleshooting",
 		"faq",
-		"migration",
 		"changelog"
 	]
 }

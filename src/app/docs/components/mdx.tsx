@@ -2,7 +2,16 @@ import Link from "next/link";
 import { isValidElement, type ReactNode } from "react";
 import { FaApple, FaLinux, FaWindows } from "react-icons/fa";
 import { slugify } from "@/lib/content-utils";
-import { getPlatformDownloads, getReleases } from "@/lib/releases";
+import {
+  AGENT_INSTALL_UNIX,
+  AGENT_RELEASES_URL,
+} from "@ao/shared/constants";
+import {
+  getAgentReleases,
+  getAgentWindowsDownload,
+  getPlatformDownloads,
+  getReleases,
+} from "@/lib/releases";
 import { Tab, Tabs } from "./DocsTabs";
 
 // Text of a heading's children, so ids match the TOC's slugify(headingText).
@@ -219,61 +228,106 @@ export function PlatformSupport({
   );
 }
 
-const RELEASES_URL = "https://github.com/Untrivial-ai/agent-orchestrator/releases";
+const RELEASES_URL = "https://github.com/houdry-genomex/houdry/releases";
 const CHANNELS = ["Stable", "Nightly"] as const;
 
 export async function InstallDownloads() {
-  const releases = await getReleases();
+  const [releases, agentReleases] = await Promise.all([
+    getReleases(),
+    getAgentReleases(),
+  ]);
   const platformDownloads = getPlatformDownloads(releases);
+  const agentWindows = getAgentWindowsDownload(agentReleases);
 
   return (
-    <div className="my-6">
-      <div className="mb-3 flex items-center justify-between">
-        <div className="text-sm font-semibold text-foreground">Get Agent Orchestrator</div>
-        <a
-          href={RELEASES_URL}
-          className="inline-flex min-h-10 items-center rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground !no-underline transition-[background-color,border-color,transform] duration-150 hover:border-foreground/30 hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.96] motion-reduce:transition-none"
-        >
-          View releases →
-        </a>
-      </div>
-      <div className="grid gap-6 sm:grid-cols-3">
-        {platformDownloads.map((platform) => (
-          <div key={platform.name}>
-            <div className="text-sm font-semibold text-foreground">{platform.name}</div>
-            {CHANNELS.map((channel) => {
-              const builds = platform.builds.filter((item) => item.channel === channel);
-              if (builds.length === 0) return null;
-              return (
-                <div key={channel} className="mt-3">
-                  <div className="text-xs font-medium text-muted-foreground">{channel}</div>
-                  <div className="mt-2 space-y-2">
-                    {builds.map((downloadBuild) => (
-                      <div key={downloadBuild.label}>
-                        <a
-                          href={downloadBuild.href}
-                          download
-                          className="flex w-full items-center gap-2 rounded-xl border border-border bg-muted/30 px-4 py-3 text-sm font-medium text-foreground !no-underline transition-colors hover:bg-muted/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                        >
-                          {(() => {
-                            const Icon =
-                              PLATFORM_ICONS[
-                                platform.name as keyof typeof PLATFORM_ICONS
-                              ];
-                            return Icon ? (
-                              <Icon className="mr-2 size-4 shrink-0" aria-hidden="true" />
-                            ) : null;
-                          })()}
-                          {downloadBuild.label}
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+    <div className="my-6 space-y-8">
+      <div>
+        <div className="mb-3 flex items-center justify-between">
+          <div>
+            <div className="text-sm font-semibold text-foreground">Houdry Fabric</div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              GPU / ops workstation. This is the <code>houdry</code> CLI.
+            </p>
           </div>
-        ))}
+          <a
+            href={RELEASES_URL}
+            className="inline-flex min-h-10 items-center rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground !no-underline transition-[background-color,border-color,transform] duration-150 hover:border-foreground/30 hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.96] motion-reduce:transition-none"
+          >
+            Fabric releases →
+          </a>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-3">
+          {platformDownloads.map((platform) => (
+            <div key={platform.name}>
+              <div className="text-sm font-semibold text-foreground">{platform.name}</div>
+              {CHANNELS.map((channel) => {
+                const builds = platform.builds.filter((item) => item.channel === channel);
+                if (builds.length === 0) return null;
+                return (
+                  <div key={channel} className="mt-3">
+                    <div className="text-xs font-medium text-muted-foreground">{channel}</div>
+                    <div className="mt-2 space-y-2">
+                      {builds.map((downloadBuild) => (
+                        <div key={downloadBuild.label}>
+                          <a
+                            href={downloadBuild.href}
+                            download
+                            className="flex w-full items-center gap-2 rounded-xl border border-border bg-muted/30 px-4 py-3 text-sm font-medium text-foreground !no-underline transition-colors hover:bg-muted/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                          >
+                            {(() => {
+                              const Icon =
+                                PLATFORM_ICONS[
+                                  platform.name as keyof typeof PLATFORM_ICONS
+                                ];
+                              return Icon ? (
+                                <Icon className="mr-2 size-4 shrink-0" aria-hidden="true" />
+                              ) : null;
+                            })()}
+                            {downloadBuild.label}
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <div className="mb-3 flex items-center justify-between">
+          <div>
+            <div className="text-sm font-semibold text-foreground">Houdry Agent</div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Desk app. Point it at <code>http://HOST:8080/v1</code>.
+            </p>
+          </div>
+          <a
+            href={AGENT_RELEASES_URL}
+            className="inline-flex min-h-10 items-center rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground !no-underline transition-[background-color,border-color,transform] duration-150 hover:border-foreground/30 hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.96] motion-reduce:transition-none"
+          >
+            Agent releases →
+          </a>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <a
+            href={agentWindows ?? AGENT_RELEASES_URL}
+            className="flex w-full items-center gap-2 rounded-xl border border-border bg-muted/30 px-4 py-3 text-sm font-medium text-foreground !no-underline transition-colors hover:bg-muted/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <FaWindows className="size-4 shrink-0" aria-hidden="true" />
+            Windows installer (.exe)
+          </a>
+          <div className="rounded-xl border border-border bg-muted/30 px-4 py-3 text-sm text-foreground">
+            <div className="mb-1 flex items-center gap-2 font-medium">
+              <FaApple className="size-4 shrink-0" aria-hidden="true" />
+              <FaLinux className="size-4 shrink-0" aria-hidden="true" />
+              Linux / macOS
+            </div>
+            <code className="break-all text-xs text-muted-foreground">{AGENT_INSTALL_UNIX}</code>
+          </div>
+        </div>
       </div>
     </div>
   );

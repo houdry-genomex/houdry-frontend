@@ -14,9 +14,9 @@ export const PRODUCT_LINKS: NavLink[] = [
     description: "Watch Houdry work a task end to end, fully offline.",
   },
   {
-    href: "/design-partners",
-    label: "Design Partners",
-    description: "Deploy Houdry for your organization's confidential work.",
+    href: "/#features",
+    label: "Features",
+    description: "What Houdry Fabric and Houdry Agent do.",
   },
 ];
 
@@ -29,7 +29,7 @@ export const RESOURCE_LINKS: NavLink[] = [
   {
     href: COMPANY.GITHUB_URL,
     label: "GitHub",
-    description: "Open source under Apache 2.0.",
+    description: "Houdry Fabric and Houdry Agent on GitHub.",
     external: true,
   },
 ];

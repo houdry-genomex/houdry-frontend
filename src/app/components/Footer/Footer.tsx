@@ -1,11 +1,15 @@
 "use client";
 
-import { COMPANY } from "@ao/shared/constants";
+import {
+  AGENT_RELEASES_URL,
+  COMPANY,
+  FABRIC_RELEASES_URL,
+} from "@ao/shared/constants";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { track } from "@/lib/analytics";
-import { TileWordmark } from "./TileWordmark";
+import { AOLogo } from "../Header/components/AOLogo";
 
 /**
  * Coarse destination for an outbound link.
@@ -39,13 +43,11 @@ export function Footer() {
         <div className="max-w-7xl mx-auto py-14 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.75fr)] lg:items-start">
           <div className="flex flex-col gap-5">
-            <div className="text-left text-4xl font-semibold leading-[1.08] tracking-[-0.04em] text-foreground sm:hidden">
-              <p>Scan Reports</p>
-              <p>Stay Offline</p>
-              <p>Ship Approvals</p>
-            </div>
             <div className="hidden sm:block">
-              <TileWordmark />
+              <AOLogo className="h-16 w-auto max-w-full lg:h-20" />
+            </div>
+            <div className="sm:hidden">
+              <AOLogo className="h-10 w-auto max-w-full" />
             </div>
           </div>
 
@@ -54,11 +56,10 @@ export function Footer() {
               title="Product"
               links={[
                 { href: "/#features", label: "Features" },
-                { href: "/#agents", label: "Agents" },
-                { href: `${COMPANY.DOCS_URL}/installation/`, label: "Install", external: true },
-                { href: `${COMPANY.DOCS_URL}/cli/`, label: "CLI", external: true },
-                { href: "/changelog", label: "Changelog" },
-                { href: "/design-partners", label: "Design Partners" },
+                { href: "/#cluster", label: "Fabric" },
+                { href: "/download", label: "Install" },
+                { href: COMPANY.GITHUB_FABRIC_URL, label: "Houdry Fabric", external: true },
+                { href: COMPANY.GITHUB_AGENT_URL, label: "Houdry Agent", external: true },
               ]}
             />
 
@@ -68,7 +69,8 @@ export function Footer() {
                 { href: `${COMPANY.DOCS_URL}/`, label: "Overview", external: true },
                 { href: `${COMPANY.DOCS_URL}/architecture/`, label: "Architecture", external: true },
                 { href: `${COMPANY.DOCS_URL}/plugins/`, label: "Plugins", external: true },
-                { href: `${COMPANY.GITHUB_URL}/releases`, label: "Releases", external: true },
+                { href: FABRIC_RELEASES_URL, label: "Fabric releases", external: true },
+                { href: AGENT_RELEASES_URL, label: "Agent releases", external: true },
                 { href: "/privacy/", label: "Privacy" },
               ]}
             />

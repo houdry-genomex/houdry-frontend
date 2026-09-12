@@ -14,7 +14,7 @@ interface HeaderProps {
 export function Header({ ctaButtons }: HeaderProps) {
   const pathname = usePathname();
   const hasTransparentHero =
-    pathname === "/" || pathname === "/design-partners";
+    pathname === "/";
   const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {

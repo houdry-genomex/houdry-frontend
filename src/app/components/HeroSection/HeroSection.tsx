@@ -1,41 +1,32 @@
 "use client";
 
 import {
+  AGENT_INSTALL_UNIX,
+  AGENT_RELEASES_URL,
   COMPANY,
+  FABRIC_INSTALL_UNIX,
+  FABRIC_INSTALL_WINDOWS,
   HERO_SUBHEADLINE,
   TAGLINE,
 } from "@ao/shared/constants";
-import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
-import { track } from "@/lib/analytics";
 import { DownloadButton } from "../DownloadButton";
+import { Platform, usePlatform } from "../../hooks/useOS";
+import { CopyInstallCommand } from "./CopyInstallCommand";
 import { ProductDemo } from "./components/ProductDemo";
-
-const INSTALL_COMMAND = "brew install agentwrapper/tap/agent-orchestrator";
-// Wraps at the path separators instead of mid-word once the pill goes two-line.
-const INSTALL_COMMAND_PARTS = INSTALL_COMMAND.split("/");
 
 interface HeroSectionProps {
   initialStars: number | null;
 }
 
-// initialStars is kept in the props contract so page.tsx stays untouched, but
-// the button no longer displays a star count.
 export function HeroSection(_props: HeroSectionProps) {
-  const [copiedCommand, setCopiedCommand] = useState(false);
-
+  const { platform } = usePlatform();
+  const isWindows = platform === Platform.Windows;
+  const fabricCommand = isWindows
+    ? FABRIC_INSTALL_WINDOWS
+    : FABRIC_INSTALL_UNIX;
+  const agentCommand = isWindows ? AGENT_RELEASES_URL : AGENT_INSTALL_UNIX;
   const githubButtonLabel = "GitHub";
-
-  const copyInstallCommand = async () => {
-    if (!navigator.clipboard) return;
-
-    await navigator.clipboard.writeText(INSTALL_COMMAND);
-    // A copy is download intent that never touches a download button, so without
-    // this the brew path is invisible in the acquisition funnel.
-    track("install_command_copied", { method: "brew" });
-    setCopiedCommand(true);
-    window.setTimeout(() => setCopiedCommand(false), 1600);
-  };
 
   return (
     <div className="relative">
@@ -68,43 +59,17 @@ export function HeroSection(_props: HeroSectionProps) {
               </a>
             </div>
 
-            <div className="landing-install-command mt-4">
-              <button
-                type="button"
-                aria-label={`Copy brew install command: ${INSTALL_COMMAND}`}
-                title="Click to copy"
-                className="group flex min-h-11 w-full max-w-xl items-start gap-2 rounded-3xl border border-border bg-card/70 px-3 py-2.5 text-left font-mono text-xs tracking-[0.5px] text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground sm:w-auto sm:items-center sm:overflow-hidden sm:text-sm"
-                onClick={copyInstallCommand}
-              >
-                <span className="text-foreground/40" aria-hidden="true">
-                  $
-                </span>
-                <code className="min-w-0 flex-1 break-words whitespace-normal text-foreground/80 sm:flex-none sm:truncate sm:whitespace-nowrap">
-                  {INSTALL_COMMAND_PARTS.map((part, index) => (
-                    <span key={part}>
-                      {index > 0 ? "/" : null}
-                      {part}
-                      {index < INSTALL_COMMAND_PARTS.length - 1 ? <wbr /> : null}
-                    </span>
-                  ))}
-                </code>
-                <span
-                  className="ml-2 inline-flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground transition-colors group-hover:text-foreground"
-                  aria-hidden="true"
-                >
-                  <svg
-                    className="h-3.5 w-3.5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <rect x="9" y="9" width="12" height="12" rx="2" />
-                    <path d="M5 15V5a2 2 0 0 1 2-2h10" />
-                  </svg>
-                  {copiedCommand ? "Copied" : "Copy"}
-                </span>
-              </button>
+            <div className="landing-install-command mt-4 flex w-full max-w-3xl flex-col gap-2">
+              <CopyInstallCommand
+                label="GPU workstation · Houdry Fabric"
+                command={fabricCommand}
+                method="fabric-release"
+              />
+              <CopyInstallCommand
+                label="Desktop · Houdry Agent"
+                command={agentCommand}
+                method="agent-install"
+              />
             </div>
           </div>
 

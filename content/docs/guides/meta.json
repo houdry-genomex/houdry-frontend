@@ -1,5 +1,9 @@
 {
 	"title": "Guides",
-	"defaultOpen": false,
-	"pages": ["per-role-agents", "parallel-issues", "ci-recovery", "review-loop", "reactions", "multi-project"]
+	"pages": [
+		"connect-to-fabric",
+		"add-gpu-workstations",
+		"knowledge-and-sops",
+		"keep-work-on-the-lan"
+	]
 }

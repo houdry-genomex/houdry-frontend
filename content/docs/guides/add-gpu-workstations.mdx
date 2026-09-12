@@ -1,0 +1,33 @@
+---
+title: Add GPU workstations
+description: Join more machines with houdry gpu register.
+---
+
+The control plane stays one process (`houdry serve`). Each extra GPU box is another worker.
+
+On the new workstation:
+
+```bash
+curl -fsSL https://github.com/houdry-genomex/houdry/releases/latest/download/install.sh | sh
+export PATH="$HOME/.houdry/bin:$PATH"
+houdry gpu detect
+houdry gpu register
+```
+
+Windows: `install.ps1`, then `houdry.exe gpu detect` and `gpu register`.
+
+If discovery fails:
+
+```bash
+houdry gpu register --server http://<control-plane-host>:8080
+```
+
+Leave `register` running. Ctrl+C drains, waits for the current job, then leaves.
+
+Agent does not need a reinstall. `model=auto` will start using the new READY node when it scores better for a task.
+
+Check:
+
+```bash
+houdry node list --server http://127.0.0.1:8080
+```

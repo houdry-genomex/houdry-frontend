@@ -1,10 +1,8 @@
-import { COMPANY } from "@ao/shared/constants";
-import { getComparisonPages } from "@/lib/compare";
 import {
 	buildDeveloperResourcesSection,
+	buildDocumentationSection,
 	buildLlmsHeader,
 	buildWhenToUseSection,
-	stripMdxSyntax,
 } from "@/lib/llms";
 import { FAQ_ITEMS } from "../components/FAQSection/constants";
 
@@ -12,10 +10,6 @@ import { FAQ_ITEMS } from "../components/FAQSection/constants";
 export const dynamic = "force-static";
 
 export async function GET() {
-	const comparisons = getComparisonPages();
-	const baseUrl = COMPANY.MARKETING_URL;
-	const docsUrl = COMPANY.DOCS_URL;
-
 	const sections: string[] = [];
 
 	// Header and guidance sections (same as llms.txt)
@@ -23,43 +17,13 @@ export async function GET() {
 		[
 			...buildLlmsHeader(),
 			"",
-			...buildWhenToUseSection(),
+			...buildWhenToUseSection({ referenceDocumentationSection: true }),
 			"",
-			...buildDeveloperResourcesSection(),
+			...buildDeveloperResourcesSection({ includeDocumentationLinks: false }),
+			"",
+			...buildDocumentationSection(),
 		].join("\n"),
 	);
-
-	sections.push(
-		[
-			"---",
-			"",
-			"# Documentation",
-			"",
-			`- **[Documentation overview](${docsUrl}/index.html.md)**`,
-			`- **[Quickstart guide](${docsUrl}/quickstart/index.html.md)**`,
-			`- **[Command-line interface (CLI) reference](${docsUrl}/cli/index.html.md)**`,
-		].join("\n"),
-	);
-
-	// Comparison pages - full content
-	if (comparisons.length > 0) {
-		sections.push(
-			[
-				"---",
-				"",
-				"# Comparisons",
-				"",
-				...comparisons.flatMap((page) => [
-					`## ${page.title}`,
-					"",
-					`URL: ${baseUrl}/compare/${page.slug}/`,
-					"",
-					stripMdxSyntax(page.content),
-					"",
-				]),
-			].join("\n"),
-		);
-	}
 
 	// FAQ section
 	sections.push(

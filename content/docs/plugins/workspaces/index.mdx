@@ -1,16 +1,12 @@
 ---
-title: Workspaces
-description: Git worktrees for repositories and AO-managed directories for Scratch projects.
+title: Moved
+description: This page is not part of Houdry Fabric or Houdry Agent.
 ---
 
-Workspace behavior follows the registered project kind:
+This URL belonged to an older coding-agent product. Use the Houdry docs instead.
 
-| Project kind | Session workspace |
-| --- | --- |
-| Git repository | A fresh [Git worktree](/docs/plugins/workspaces/worktree) and branch. |
-| Multi-repository workspace | A root worktree with registered child repositories materialized for the session. |
-| Scratch | An AO-managed directory with no branch or PR operations. |
-
-AO does not currently offer a full-clone workspace selector. Register a project with `ao project add`, then let the daemon route workspace operations from its project record.
-
-Workspace cleanup is conservative: killing a session does not force-delete a dirty registered worktree. Use `ao session cleanup --dry-run` to inspect eligible terminated sessions.
+<Cards>
+	<Card title="What Houdry is" href="/docs" description="Fabric on GPUs. Agent on the desk." />
+	<Card title="Installation" href="/docs/installation" description="Release install commands." />
+	<Card title="Houdry Agent" href="/docs/dashboard" description="Sessions and knowledge." />
+</Cards>

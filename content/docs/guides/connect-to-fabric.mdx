@@ -1,0 +1,17 @@
+---
+title: Connect Agent to Fabric
+description: Set Houdry server URL so chat uses your GPUs.
+---
+
+Houdry Agent will not use the plant GPUs until it is aimed at Fabric.
+
+1. Confirm `houdry serve --listen 0.0.0.0:8080` is running.
+2. Open Agent → **Houdry server URL**.
+3. Same machine: `http://127.0.0.1:8080/v1`.
+4. Another machine: `http://<gpu-host>:8080/v1` (must include `/v1`).
+5. Optional key `houdry` if `serve` was started with `--token`.
+6. Connect. Send “Say hello.” You should get a local reply.
+
+If several control planes answer, pick the one for this plant. Isolated guest Wi‑Fi: skip discovery and paste the URL.
+
+See [LAN and fabric URL](/docs/configuration/remote-access).

@@ -1346,17 +1346,14 @@ function Sidebar({ cards }: { cards: PreviewCard[] }) {
 
 			<div className="flex shrink-0 items-center gap-1.5 px-3 pb-2 pt-0.5">
 				<img
-					src="/ao-logo.svg"
+					src="/houdry-logo.png"
 					alt=""
-					width={22}
+					width={96}
 					height={22}
 					aria-hidden="true"
-					className="h-[22px] w-[22px] -translate-y-[1px] shrink-0 rounded-md"
+					className="h-[18px] w-auto -translate-y-[1px] shrink-0 object-contain mix-blend-lighten"
 					draggable="false"
 				/>
-				<div className="min-w-0 flex-1 translate-y-px truncate text-[12px] font-bold leading-tight tracking-tight text-[var(--preview-sidebar-foreground)]">
-					Houdry
-				</div>
 			</div>
 
 			<div className="flex shrink-0 flex-col px-2">

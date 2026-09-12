@@ -1,20 +1,12 @@
 ---
-title: Codex
-description: Built-in Terminal UI and native app-server Chat support for the user's Codex installation.
+title: Moved
+description: This page is not part of Houdry Fabric or Houdry Agent.
 ---
 
-AO uses the locally installed `codex` executable and its existing OpenAI authentication.
+This URL belonged to an older coding-agent product. Use the Houdry docs instead.
 
-```bash
-ao agent ls --refresh
-ao spawn --project my-app --name codex-task --agent codex --mode chat
-```
-
-## Interfaces
-
-- **Terminal UI:** runs the native Codex CLI in the session worktree.
-- **Chat:** connects to Codex's native app-server protocol and persists the provider conversation identity with the AO session.
-
-Codex supports the same capability-gated Chat/Terminal UI handoff as Claude Code. The AO session and worktree remain stable across a compatible handoff.
-
-AO performs bounded installation and authentication probes before spawn. Use `--skip-agent-check` only to bypass that advisory CLI preflight; daemon validation remains authoritative.
+<Cards>
+	<Card title="What Houdry is" href="/docs" description="Fabric on GPUs. Agent on the desk." />
+	<Card title="Installation" href="/docs/installation" description="Release install commands." />
+	<Card title="Houdry Agent" href="/docs/dashboard" description="Sessions and knowledge." />
+</Cards>
