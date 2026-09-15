@@ -10,21 +10,21 @@ type Row = {
 
 const ROWS: Row[] = [
 	{
-		word: "Scan Reports",
+		word: "Sovereign",
 		font: (px) => `700 ${px}px ui-sans-serif, system-ui, Arial, sans-serif`,
 		letterTrack: -0.01,
 		fillFrac: 0.95,
 		bright: false,
 	},
 	{
-		word: "Stay Offline",
+		word: "On-Premise",
 		font: (px) => `700 ${px}px ui-sans-serif, system-ui, Arial, sans-serif`,
 		letterTrack: -0.01,
 		fillFrac: 0.95,
 		bright: false,
 	},
 	{
-		word: "Ship Approvals",
+		word: "Agentic AI Workbench",
 		font: (px) => `700 ${px}px ui-sans-serif, system-ui, Arial, sans-serif`,
 		letterTrack: -0.01,
 		fillFrac: 0.95,

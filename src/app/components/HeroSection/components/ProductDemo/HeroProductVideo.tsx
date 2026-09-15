@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const SOP_VIDEO_SRC = "/sop-edited.mp4";
+const SOP_VIDEO_SRC = "/videos/sop-grounding.mp4";
 
 export function HeroProductVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -45,7 +45,7 @@ export function HeroProductVideo() {
         playsInline
         preload="metadata"
         className="aspect-video h-auto w-full object-contain"
-        aria-label="Houdry Agent SOP demo"
+        aria-label="SOP manual answer grounding"
       />
       <button
         type="button"

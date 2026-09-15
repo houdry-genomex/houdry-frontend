@@ -53,11 +53,17 @@ export function getDocPage(slug: string[]): DocPage | undefined {
 	if (!file) return undefined;
 	try {
 		const { data, content } = matter(fs.readFileSync(file, "utf-8"));
+		const title =
+			typeof data.title === "string" && data.title.trim()
+				? data.title.trim()
+				: undefined;
+		const description =
+			typeof data.description === "string" ? data.description : undefined;
 		return {
 			slug,
 			url: `/docs${slug.length ? `/${slug.join("/")}` : ""}`,
-			title: data.title ?? "Untitled",
-			description: data.description,
+			title: title ?? "Untitled",
+			description,
 			content,
 		};
 	} catch {
@@ -83,7 +89,9 @@ export function getAllDocSlugs(): string[][] {
 }
 
 function titleFor(slug: string[], fallback: string): string {
-	return getDocPage(slug)?.title ?? fallback;
+	const title = getDocPage(slug)?.title;
+	if (title && title !== "Untitled") return title;
+	return fallback;
 }
 
 function humanize(name: string): string {
@@ -122,7 +130,11 @@ function buildItems(dir: string, prefix: string[], pages?: string[]): DocsNavIte
 			items.push({ title: sep[1].trim(), separator: true });
 			continue;
 		}
-		if (entry === "index") continue;
+		if (entry === "index") {
+			const url = prefix.length ? `/docs/${prefix.join("/")}` : "/docs";
+			items.push({ title: titleFor(prefix, "Overview"), url });
+			continue;
+		}
 		items.push(navNode(dir, prefix, entry));
 	}
 	return items;

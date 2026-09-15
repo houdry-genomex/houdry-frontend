@@ -5,51 +5,45 @@ description: Fabric on GPU workstations. Agent on the desk. OpenAI-shaped /v1 on
 
 Houdry splits **compute** from **the people using it**.
 
-```text
-Desk (Houdry Agent)                 GPU workstations (Houdry Fabric)
-───────────────────                 ────────────────────────────────
-Chat, knowledge, files, tools       houdry serve     :8080  control plane
-  POST /v1/chat/completions           node list, job queue, model catalog
-  model=auto or a named model         Wi‑Fi announce (mDNS + UDP 41808)
-                                    houdry gpu register
-                                      heartbeat, claim jobs, run Ollama
-```
+<ArchitectureSplit />
 
-End users never talk to a GPU process directly. They talk to the control plane. The control plane picks a `(model, node)` pair and the registered workstation runs inference.
+## Two Fabric processes, plus the desktop app
 
-## Two processes, not two products mixed together
-
-| Process | Product | Role |
+| What you run | Product | What it does |
 | --- | --- | --- |
-| `houdry serve --listen 0.0.0.0:8080` | Fabric | HTTP API, dashboard, LAN announce, router |
+| `houdry serve` on port 8080 | Fabric | HTTP API, dashboard, LAN announce, router |
 | `houdry gpu register` | Fabric | Stay READY, claim jobs, run models |
-| Houdry Agent desktop app | Agent | UI, sessions, knowledge, local tools |
+| Houdry Agent | Agent | Chat, sessions, knowledge, local tools |
 
-`houdry node join` is the same persistent compute process as `gpu register`. `houdry gpu join` is a one-shot inventory snapshot and does **not** run jobs. Do not use it instead of `register`.
+`houdry node join` is the same worker as `gpu register`. `houdry gpu join` is a one-shot inventory snapshot and does **not** run jobs.
 
 One machine can run `serve` and `register` together. Extra GPU boxes only run `register`.
 
-## What happens when nobody is registered
+## What a request does
 
-With no READY GPU node, `POST /v1/chat/completions` can still talk to **Ollama on the serve host** (live token streaming, vision). When a GPU registers, the same URL starts dispatching cluster jobs. You do not change the Agent URL.
+<RequestFlow />
 
-## Agent
+Analyze is a heuristic (keywords, length, images, tools), not a second LLM call. Scoring prefers a loaded, right-sized model on a READY node. Vision attachments go to a vision-capable model when one is available.
 
-Houdry Agent is the desktop app. It is not the fabric.
+## If no GPU is registered yet
+
+With no READY GPU node, chat can still talk to **Ollama on the serve host**. When a GPU registers, the same Agent URL starts dispatching cluster jobs. You do not change the Agent URL.
+
+## Agent settings
 
 | Setting | Typical value |
 | --- | --- |
 | Provider | **Houdry server URL** |
-| Base URL | `http://<fabric-host>:8080/v1` |
+| Base URL | `http://HOST:8080/v1` |
 | Model | `auto` (fabric router) |
 | API key | `houdry` if `serve` was started with `--token` |
+
+Same machine as Fabric: `http://127.0.0.1:8080/v1`. Browser dashboard is `http://HOST:8080/` (no `/v1`). Agent needs `/v1`.
 
 Data directory:
 
 - Linux / macOS: `~/.houdry-agent`
 - Windows: `%LOCALAPPDATA%\houdry-agent`
-
-Knowledge, SOPs, and session history stay in that home. Tools run on the desk; tokens come from the fabric.
 
 Fabric state lives under `~/.houdry` (`HOODRY_HOME` overrides). Generated files can be served from `/files/`.
 
@@ -57,22 +51,9 @@ Fabric state lives under `~/.houdry` (`HOODRY_HOME` overrides). Generated files 
 
 - Fabric announces on the LAN (`_houdry._tcp` and UDP `41808`).
 - Agent and extra GPU nodes browse for that announce.
-- Guest Wi‑Fi that isolates clients blocks discovery. Paste a URL instead.
+- Guest Wi-Fi that isolates clients blocks discovery. Paste a URL instead.
 - There is no cloud LLM hop. Pull the WAN cable; chat against local models still works if Ollama and Fabric are up.
 - Do not bind `houdry serve` to the public internet.
-
-## Request path
-
-```text
-Prompt in Agent
-  → POST /v1/chat/completions  (model=auto)
-  → Fabric analyzes the task (vision, tools, complexity)
-  → Scores catalog models against READY nodes
-  → Worker runs Ollama Infer
-  → Answer streams back to Agent
-```
-
-Analyze is a heuristic (keywords, length, images, tools), not a second LLM call. Scoring prefers a loaded, right-sized model on a READY node. Vision attachments go to a vision-capable model when one is available.
 
 ## Next
 

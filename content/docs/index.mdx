@@ -3,17 +3,14 @@ title: What Houdry is
 description: Private GPU fabric plus a desktop agent. Work stays on your network.
 ---
 
-Houdry is **two products**. They are not interchangeable.
+Houdry is two products that work together. They are not the same install.
 
-| Product | Where it runs | What the user sees |
-| --- | --- | --- |
-| **Houdry Fabric** | GPU / ops workstation | A CLI: `houdry serve`, `houdry gpu register`. Dashboard at `http://host:8080/` |
-| **Houdry Agent** | Desk (laptop or PC) | The chat app. Sessions, knowledge, SOPs. Talks to Fabric at `…:8080/v1` |
+<ProductRoles />
 
 Fabric owns the GPUs and the models. Agent owns the people and the files. There is no cloud LLM API in the path.
 
 <Callout type="info" title="If you only remember one thing">
-	Install Fabric on the machine with the GPU. Install Agent on the desk. Point Agent at `http://<fabric-host>:8080/v1`. Do not put Fabric on every laptop.
+	Install Fabric on the machine with the GPU. Install Agent on the desk. Point Agent at `http://HOST:8080/v1`. Do not put Fabric on every laptop.
 </Callout>
 
 ## Which page should I open?
@@ -21,25 +18,18 @@ Fabric owns the GPUs and the models. Agent owns the people and the files. There 
 - **Ops / GPU owner** → [Installation](/docs/installation), then keep `houdry serve` and `houdry gpu register` running.
 - **Everyone else on the desk** → [Installation](/docs/installation) (Agent only), then [Houdry Agent](/docs/dashboard).
 - **First time, both machines in front of you** → [Quickstart](/docs/quickstart).
+- **How the pieces connect** → [Architecture](/docs/architecture).
 - **Chat failed** → [Troubleshooting](/docs/troubleshooting).
 
-## What a working plant looks like
+## How they connect
 
-```text
-Desk                                  GPU workstation
-────                                  ───────────────
-Houdry Agent                          Ollama  (models)
-  Knowledge, SOPs, chat                 houdry serve     :8080
-  POST /v1/chat/completions             houdry gpu register  (leave this running)
-```
-
-End users never talk to the GPU process. They talk to the control plane. The control plane picks a `(model, node)` pair (`model=auto`).
+<ArchitectureSplit />
 
 ## What you can do once it is connected
 
 - Ask questions against SOPs, inspection reports, and manuals that stay on this computer.
 - Draft approval notes and registers from files that never leave the premises.
-- Send drawings / scans; Fabric routes vision work to a vision-capable local model when one is loaded.
+- Send drawings / scans. Fabric routes vision work to a vision-capable local model when one is loaded.
 - Add another GPU workstation with `houdry gpu register`. Agent does not need a reinstall.
 
 ## Next

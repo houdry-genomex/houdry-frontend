@@ -10,7 +10,7 @@ export const COMPANY = {
   GITHUB_FABRIC_URL: "https://github.com/houdry-genomex/houdry",
   GITHUB_AGENT_URL: "https://github.com/houdry-genomex/houdry-agent",
   STATUS_URL: "https://houdry.example.com/status",
-  TRUST_URL: "https://houdry.example.com/privacy/",
+  TRUST_URL: "https://houdry.example.com",
   MAIL_TO: "mailto:team@houdry.example.com",
   X_URL: "https://x.com/aoagents",
   YOUTUBE_URL: "https://www.youtube.com/@itrytoohard",

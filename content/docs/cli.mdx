@@ -1,6 +1,6 @@
 ---
-title: CLI reference
-description: houdry: control plane, GPU nodes, routing, and jobs.
+title: CLI
+description: "houdry serve, gpu register, routing, and jobs."
 ---
 
 The `houdry` binary is **Houdry Fabric**. It is what you install on GPU workstations. Houdry Agent is a separate desktop app; it is not this CLI.
@@ -66,7 +66,7 @@ houdry route --interactive
 Agent and any OpenAI SDK use:
 
 ```text
-POST http://<host>:8080/v1/chat/completions
+POST http://HOST:8080/v1/chat/completions
 ```
 
 `model=auto` runs the router. A named model pins that model. `GET /.well-known/houdry.json` identifies a discovered host.

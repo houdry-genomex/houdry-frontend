@@ -2,7 +2,6 @@
 
 import { Button } from "@ao/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 
@@ -43,10 +42,7 @@ export function CookieConsent() {
 					<p className="text-sm text-muted-foreground">
 						We only collect analytics cookies so we can improve your experience.
 					</p>
-					<div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-						<Button variant="link" asChild className="px-0">
-							<Link href="/privacy/">Privacy policy</Link>
-						</Button>
+					<div className="mt-3 flex flex-wrap items-center justify-end gap-2">
 						<div className="flex items-center gap-2">
 							<Button variant="outline" onClick={handleOptOut}>
 								Opt-out

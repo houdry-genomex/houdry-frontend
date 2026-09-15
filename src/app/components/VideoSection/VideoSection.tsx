@@ -1,21 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import { track } from "@/lib/analytics";
 import { newVideoProgressState, reportVideoProgress } from "@/lib/analytics/video-progress";
 
-// Loaded on demand, not with the page. The player is ~1.1MB and the section is
-// below the fold behind a click, so a static import put it on the critical path
-// of every homepage visit for a video most visitors never play. It is only
-// rendered once `playing` is true, so there is nothing to show until then.
-const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
-
-const MUX_PLAYBACK_ID =
-	process.env.NEXT_PUBLIC_MUX_PLAYBACK_ID ??
-	"cpmHxjRygocH1rPeKq6jk4UYxGghl8B8ABcop4Gc01b8";
-const VIDEO_TITLE = "AO Demo";
+const VIDEO_SRC = "/videos/houdry-walkthrough.mp4";
+const VIDEO_POSTER = "/videos/houdry-walkthrough.jpg";
+const VIDEO_TITLE = "Houdry walkthrough";
 
 function PlayIcon({ className = "" }: { className?: string }) {
 	return (
@@ -32,11 +24,7 @@ function PlayIcon({ className = "" }: { className?: string }) {
 
 export function VideoSection() {
 	const [playing, setPlaying] = useState(false);
-	// One view's reported milestones. Lives in a ref so a re-render never resets
-	// it and re-reports a milestone the visitor already passed.
-	// Lazy ref init: passing newVideoProgressState() as the useRef argument would
-	// build a fresh Set on every render and immediately discard it. Build it once,
-	// on first render, and read the stable value out for the rest of the render.
+	const videoRef = useRef<HTMLVideoElement>(null);
 	const progressRef = useRef<ReturnType<typeof newVideoProgressState> | null>(null);
 	progressRef.current ??= newVideoProgressState();
 	const progress = progressRef.current;
@@ -49,7 +37,7 @@ export function VideoSection() {
 						See it in action
 					</h2>
 					<p className="mt-3 text-base text-muted-foreground">
-						Watch Houdry take a scanned inspection report to a finished approval note, fully offline.
+						The full walkthrough, with voice-over.
 					</p>
 				</div>
 
@@ -59,22 +47,21 @@ export function VideoSection() {
 						className="relative aspect-video overflow-hidden bg-black"
 					>
 						{playing ? (
-							// An in-page player rather than the player.mux.com iframe this
-							// replaced: playback position is not readable across that origin, so
-							// watch-through could not be measured at all through the embed.
-							<MuxPlayer
-								playbackId={MUX_PLAYBACK_ID}
+							<video
+								ref={videoRef}
+								src={VIDEO_SRC}
+								poster={VIDEO_POSTER}
 								autoPlay
-								metadata={{ video_title: VIDEO_TITLE }}
-								title={VIDEO_TITLE}
-								className="absolute inset-0 h-full w-full"
+								controls
+								playsInline
+								preload="auto"
+								className="absolute inset-0 h-full w-full object-contain"
+								aria-label={VIDEO_TITLE}
 								onTimeUpdate={(event) => {
-									const player = event.currentTarget as { currentTime?: number; duration?: number };
-									reportVideoProgress(progress, player.currentTime ?? 0, player.duration ?? 0);
+									const player = event.currentTarget;
+									reportVideoProgress(progress, player.currentTime, player.duration);
 								}}
 								onEnded={() => {
-									// currentTime rarely lands exactly on duration, so without this the
-									// 100% milestone would be missed by the people who watched it all.
 									reportVideoProgress(progress, 1, 1);
 								}}
 							/>
@@ -82,8 +69,6 @@ export function VideoSection() {
 							<button
 								type="button"
 								onClick={() => {
-									// Only the start. Watch time lives inside the Mux iframe and is not
-									// readable from this page, so a duration here would be invented.
 									track("video_started", { video: "demo", placement: "see_it" });
 									setPlaying(true);
 								}}
@@ -91,8 +76,8 @@ export function VideoSection() {
 								className="group absolute inset-0 cursor-pointer"
 							>
 								<Image
-									src="/mux-video-preview.jpg"
-									alt="Still from the Houdry demo video"
+									src={VIDEO_POSTER}
+									alt="Still from the Houdry walkthrough"
 									fill
 									sizes="(min-width: 1280px) 1280px, 100vw"
 									className="object-cover"

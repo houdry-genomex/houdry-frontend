@@ -69,11 +69,7 @@ export function WaitlistForm({ heading, description }: WaitlistFormProps) {
 				</button>
 				<p className="text-xs leading-relaxed text-muted-foreground">
 					By joining, you ask us to send your email to PostHog to manage this
-					waitlist. This submission does not turn on site analytics. See our{" "}
-					<a className="underline underline-offset-2" href="/privacy/">
-						privacy policy
-					</a>
-					.
+					waitlist. This submission does not turn on site analytics.
 				</p>
 			</form>
 		</>

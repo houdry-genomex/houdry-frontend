@@ -5,12 +5,9 @@ description: Install Houdry Fabric on GPU workstations and Houdry Agent on the d
 
 You install **two things**, usually on **two machines**.
 
-| You are… | Install | Then |
-| --- | --- | --- |
-| Ops, GPU workstation | **Houdry Fabric** + **Ollama** | `houdry serve` and `houdry gpu register` |
-| Operator at a desk | **Houdry Agent** | Point it at `http://<fabric-host>:8080/v1` |
+<ProductRoles />
 
-One machine can be both (laptop with a GPU, or a workstation that also has a keyboard). Same commands; Agent then uses `http://127.0.0.1:8080/v1`.
+One machine can be both (a workstation that also has a keyboard). Same commands. Agent then uses `http://127.0.0.1:8080/v1`.
 
 <InstallDownloads />
 
@@ -88,7 +85,7 @@ On first run:
 
 1. Choose **Houdry server URL** (not a public OpenAI / Azure endpoint).
 2. Same machine as Fabric: `http://127.0.0.1:8080/v1`.
-3. Another machine on the LAN: `http://<gpu-host>:8080/v1`. The `/v1` suffix is required.
+3. Another machine on the LAN: `http://HOST:8080/v1`. The `/v1` suffix is required.
 4. Optional API key: `houdry` (use this if you passed `--token` to `serve`).
 
 If one control plane is visible on Wi‑Fi, Agent can fill the URL. Confirm with **Connect**.

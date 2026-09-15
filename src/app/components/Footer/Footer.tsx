@@ -9,7 +9,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { track } from "@/lib/analytics";
-import { AOLogo } from "../Header/components/AOLogo";
+import { TileWordmark } from "./TileWordmark";
 
 /**
  * Coarse destination for an outbound link.
@@ -43,11 +43,13 @@ export function Footer() {
         <div className="max-w-7xl mx-auto py-14 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.75fr)] lg:items-start">
           <div className="flex flex-col gap-5">
-            <div className="hidden sm:block">
-              <AOLogo className="h-16 w-auto max-w-full lg:h-20" />
+            <div className="text-left text-4xl font-semibold leading-[1.08] tracking-[-0.04em] text-foreground sm:hidden">
+              <p>Sovereign</p>
+              <p>On-Premise</p>
+              <p>Agentic AI Workbench</p>
             </div>
-            <div className="sm:hidden">
-              <AOLogo className="h-10 w-auto max-w-full" />
+            <div className="hidden sm:block">
+              <TileWordmark />
             </div>
           </div>
 
@@ -71,7 +73,6 @@ export function Footer() {
                 { href: `${COMPANY.DOCS_URL}/plugins/`, label: "Plugins", external: true },
                 { href: FABRIC_RELEASES_URL, label: "Fabric releases", external: true },
                 { href: AGENT_RELEASES_URL, label: "Agent releases", external: true },
-                { href: "/privacy/", label: "Privacy" },
               ]}
             />
 

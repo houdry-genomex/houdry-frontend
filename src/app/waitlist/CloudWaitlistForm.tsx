@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import posthog from "posthog-js";
 import { useId, useState } from "react";
 import { track } from "@/lib/analytics";
@@ -137,11 +136,7 @@ export function CloudWaitlistForm() {
       ) : null}
 
       <p className="text-xs leading-relaxed text-muted-foreground">
-        We'll only use this to contact you about AO Cloud. See our{" "}
-        <Link className="underline underline-offset-2" href="/privacy/">
-          privacy policy
-        </Link>
-        .
+        We'll only use this to contact you about AO Cloud.
       </p>
     </form>
   );

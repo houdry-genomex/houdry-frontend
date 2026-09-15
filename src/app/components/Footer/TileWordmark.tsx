@@ -26,7 +26,7 @@ export function TileWordmark() {
 		<div
 			ref={hostRef}
 			className="relative h-[230px] w-full overflow-hidden rounded-xl"
-			aria-label="Spawn Agents Step Away Ship Faster"
+			aria-label="Sovereign On-Premise Agentic AI Workbench"
 		/>
 	);
 }

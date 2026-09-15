@@ -13,6 +13,7 @@ import {
   getReleases,
 } from "@/lib/releases";
 import { Tab, Tabs } from "./DocsTabs";
+import { ArchitectureSplit, ProductRoles, RequestFlow } from "./DocsDiagrams";
 
 // Text of a heading's children, so ids match the TOC's slugify(headingText).
 function textOf(node: ReactNode): string {
@@ -352,4 +353,7 @@ export const docsMdxComponents = {
   PluginGrid,
   PlatformSupport,
   InstallDownloads,
+  ArchitectureSplit,
+  RequestFlow,
+  ProductRoles,
 };
