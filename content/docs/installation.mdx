@@ -7,11 +7,13 @@ You install **two things**, usually on **two machines**.
 
 <ProductRoles />
 
-One machine can be both (a workstation that also has a keyboard). Same commands. Agent then uses `http://127.0.0.1:8080/v1`.
+One machine can be both (a workstation that also has a keyboard). Same commands. Agent then uses `https://127.0.0.1:8080/v1`.
 
 <InstallDownloads />
 
 ## 1. GPU workstation: Houdry Fabric
+
+This repo is [houdry-genomex/houdry](https://github.com/houdry-genomex/houdry). The installer puts the `houdry` binary in `~/.houdry/bin`.
 
 Linux / macOS:
 
@@ -34,6 +36,8 @@ Put `~/.houdry/bin` (Windows: `$HOME\.houdry\bin`) on `PATH` so later terminals 
 
 Binaries also ship on the [Fabric releases](https://github.com/houdry-genomex/houdry/releases/latest) page (`houdry-linux-amd64`, `houdry-windows-amd64.exe`, and so on). Prefer the install script unless you need a specific architecture.
 
+`houdry serve` listens on `0.0.0.0:8080` unless you pass `--listen`. That listener is **HTTPS**. There is no HTTP on the control-plane port.
+
 ## 2. Models: Ollama on the GPU host
 
 Fabric’s working runtime is **Ollama**. Without it, chat has nowhere to run.
@@ -54,24 +58,37 @@ A workstation with **no discrete GPU** can still run `houdry serve` as the contr
 Two terminals is the usual setup. Leave both running.
 
 ```bash
-# Terminal 1: control plane (any machine on the Wi‑Fi; GPU not required)
+# Terminal 1: control plane (any machine on the Wi-Fi; GPU not required)
 houdry serve --listen 0.0.0.0:8080
+```
 
+On first `serve`, Fabric writes a local CA at `~/.houdry/server/pki/root_ca.crt`. Browsers, curl, and Agent must trust that file. Dashboard: `https://127.0.0.1:8080/`.
+
+```bash
 # Terminal 2: this GPU workstation
+houdry gpu detect
 houdry gpu register
 ```
 
-`gpu register` finds `houdry serve` on the same Wi‑Fi, stays READY, and takes work from Houdry Agent. Extra workstations only need detect + register. They do not start a second `serve`.
+`gpu register` is the same process as `houdry node join`. It finds `houdry serve` on the same Wi-Fi, stays READY, and takes work from Houdry Agent. Extra workstations only need detect + register. They do not start a second `serve`.
 
-Dashboard: `http://127.0.0.1:8080/` on the serve host.
+Do **not** use `houdry gpu join`. That is a one-shot inventory snapshot and does not run jobs.
 
-If discovery fails (guest Wi‑Fi):
+<Callout type="info" title="First GPU join">
+	On the serve machine run `houdry node enroll create`. It prints a one-time `HDRY_…` token (10 minutes, one use). Use that on the GPU host when register enrolls. Do not pass it as `--token`. `--token` on `serve` is the optional API key for chat, not enrollment.
+</Callout>
+
+If discovery fails (guest Wi-Fi):
 
 ```bash
-houdry gpu register --server http://127.0.0.1:8080
+houdry gpu register --server https://127.0.0.1:8080
 ```
 
+Set `HOUDRY_SERVER` (and optional `HOUDRY_TOKEN`) so later CLI commands do not need `--server` every time. Config lives in `~/.houdry` (`HOUDRY_HOME` overrides the directory).
+
 ## 4. Desk: Houdry Agent
+
+This repo is [houdry-genomex/houdry-agent](https://github.com/houdry-genomex/houdry-agent). It is the desktop app, not the `houdry` CLI.
 
 Linux / macOS:
 
@@ -84,11 +101,19 @@ Windows: download `Houdry-Agent-*-win-x64.exe` from [Agent releases](https://git
 On first run:
 
 1. Choose **Houdry server URL** (not a public OpenAI / Azure endpoint).
-2. Same machine as Fabric: `http://127.0.0.1:8080/v1`.
-3. Another machine on the LAN: `http://HOST:8080/v1`. The `/v1` suffix is required.
-4. Optional API key: `houdry` (use this if you passed `--token` to `serve`).
+2. Same machine as Fabric: `https://127.0.0.1:8080/v1`.
+3. Another machine on the LAN: `https://HOST:8080/v1`. The `/v1` suffix is required.
+4. Model: `auto` (the fabric router picks the GPU and the model).
+5. Optional API key: `houdry` (use this if you passed `--token` to `serve`).
 
-If one control plane is visible on Wi‑Fi, Agent can fill the URL. Confirm with **Connect**.
+If one control plane is visible on Wi-Fi, Agent can fill the URL. It looks for `/.well-known/houdry.json` on ports **18080**, **8090**, and **8080**. Confirm with **Connect**. If you started serve with `--listen` on another port, paste that port.
+
+Trust the Fabric CA on the desk if TLS fails: copy `~/.houdry/server/pki/root_ca.crt` from the serve host.
+
+Agent data:
+
+- Linux / macOS: `~/.houdry-agent`
+- Windows: `%LOCALAPPDATA%\houdry-agent`
 
 ## Check that it worked
 
@@ -98,6 +123,7 @@ On the GPU / ops machine:
 houdry version
 houdry gpu detect
 houdry discover
+houdry node list --server https://127.0.0.1:8080
 ```
 
 `discover` should list the control plane. Open Agent and send “Say hello.” If chat fails, see [Troubleshooting](/docs/troubleshooting).

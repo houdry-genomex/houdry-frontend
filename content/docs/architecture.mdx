@@ -1,6 +1,6 @@
 ---
 title: Architecture
-description: Fabric on GPU workstations. Agent on the desk. OpenAI-shaped /v1 on the LAN.
+description: Fabric on GPU workstations. Agent on the desk. HTTPS /v1 on the LAN.
 ---
 
 Houdry splits **compute** from **the people using it**.
@@ -11,13 +11,13 @@ Houdry splits **compute** from **the people using it**.
 
 | What you run | Product | What it does |
 | --- | --- | --- |
-| `houdry serve` on port 8080 | Fabric | HTTP API, dashboard, LAN announce, router |
-| `houdry gpu register` | Fabric | Stay READY, claim jobs, run models |
-| Houdry Agent | Agent | Chat, sessions, knowledge, local tools |
+| `houdry serve` | Fabric | HTTPS API, dashboard, LAN announce, router. Default `0.0.0.0:8080`. |
+| `houdry gpu register` | Fabric | Stay READY, claim jobs, run Ollama. Same as `houdry node join`. |
+| Houdry Agent | Agent | Chat, sessions, knowledge, local tools. Calls `POST /v1/chat/completions`. |
 
-`houdry node join` is the same worker as `gpu register`. `houdry gpu join` is a one-shot inventory snapshot and does **not** run jobs.
+`houdry gpu join` is a one-shot inventory snapshot and does **not** run jobs.
 
-One machine can run `serve` and `register` together. Extra GPU boxes only run `register`.
+One machine can run `serve` and `register` together. Extra GPU boxes only run `register`. End users never talk to the GPU process.
 
 ## What a request does
 
@@ -25,33 +25,38 @@ One machine can run `serve` and `register` together. Extra GPU boxes only run `r
 
 Analyze is a heuristic (keywords, length, images, tools), not a second LLM call. Scoring prefers a loaded, right-sized model on a READY node. Vision attachments go to a vision-capable model when one is available.
 
-## If no GPU is registered yet
-
-With no READY GPU node, chat can still talk to **Ollama on the serve host**. When a GPU registers, the same Agent URL starts dispatching cluster jobs. You do not change the Agent URL.
+With no READY GPU node, the same `/v1` talks to **Ollama on the serve host** (live streaming, vision). When a GPU registers, that URL starts dispatching cluster jobs. You do not change the Agent URL.
 
 ## Agent settings
 
 | Setting | Typical value |
 | --- | --- |
 | Provider | **Houdry server URL** |
-| Base URL | `http://HOST:8080/v1` |
+| Base URL | `https://HOST:8080/v1` |
 | Model | `auto` (fabric router) |
 | API key | `houdry` if `serve` was started with `--token` |
 
-Same machine as Fabric: `http://127.0.0.1:8080/v1`. Browser dashboard is `http://HOST:8080/` (no `/v1`). Agent needs `/v1`.
+Same machine as Fabric: `https://127.0.0.1:8080/v1`. Browser dashboard is `https://HOST:8080/` (no `/v1`). Agent needs `/v1`.
 
 Data directory:
 
-- Linux / macOS: `~/.houdry-agent`
+- Linux / macOS: `~/.houdry-agent` (`HERMES_HOME` overrides)
 - Windows: `%LOCALAPPDATA%\houdry-agent`
 
-Fabric state lives under `~/.houdry` (`HOODRY_HOME` overrides). Generated files can be served from `/files/`.
+Fabric state lives under `~/.houdry` (`HOUDRY_HOME` overrides). First `serve` writes `$HOUDRY_HOME/server/pki/root_ca.crt`. Generated files can be served from `/files/`.
+
+## Node and job states
+
+Nodes: JOINED (inventory only, not schedulable), READY, BUSY, DRAINING, OFFLINE (stale heartbeat).
+
+Jobs: queued, pending (assigned, waiting for claim), running, succeeded, failed.
 
 ## Network
 
 - Fabric announces on the LAN (`_houdry._tcp` and UDP `41808`).
-- Agent and extra GPU nodes browse for that announce.
+- Agent and extra GPU nodes browse for that announce. Agent also probes `/.well-known/houdry.json` on ports 18080, 8090, and 8080.
 - Guest Wi-Fi that isolates clients blocks discovery. Paste a URL instead.
+- GPU node APIs use mTLS after `houdry node enroll create`. Chat `/v1` does not require a client cert.
 - There is no cloud LLM hop. Pull the WAN cable; chat against local models still works if Ollama and Fabric are up.
 - Do not bind `houdry serve` to the public internet.
 

@@ -26,7 +26,7 @@ export function GET() {
     "",
     "- GPU / ops: `curl -fsSL https://github.com/houdry-genomex/houdry/releases/latest/download/install.sh | sh`",
     "- Then `houdry serve --listen 0.0.0.0:8080` and `houdry gpu register`.",
-    "- Desk: install Houdry Agent and point it at `http://<fabric-host>:8080/v1`.",
+    "- Desk: install Houdry Agent and point it at `https://<fabric-host>:8080/v1`.",
     "",
     "## Learn more",
     "",

@@ -42,7 +42,7 @@ export function buildWhenToUseSection(
 		"",
 		"- Run open-weight models on GPU workstations you already own, without sending documents off premises.",
 		"- Join those workstations into one fabric (`houdry serve` + `houdry gpu register`) that routes each request to the right (model, node) pair.",
-		"- Give operators Houdry Agent on the desk, pointed at `http://<fabric-host>:8080/v1`.",
+		"- Give operators Houdry Agent on the desk, pointed at `https://<fabric-host>:8080/v1`.",
 		"- Keep reports, drawings, and code on the plant LAN.",
 		"",
 		`Houdry Fabric is the GPU control plane. Houdry Agent is the desktop client. ${documentationDirection}`,

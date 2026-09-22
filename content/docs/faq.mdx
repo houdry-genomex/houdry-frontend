@@ -9,7 +9,7 @@ description: Fabric, Agent, air gap, models, and hardware.
 	</Accordion>
 
 	<Accordion title="Does any data leave our premises?">
-		Not for model inference. Fabric runs on your GPU workstations. Agent talks to `http://HOST:8080/v1` on the LAN. Documents in Knowledge stay on the desk machine. You can pull the WAN cable and keep working if Ollama and Fabric are up.
+		Not for model inference. Fabric runs on your GPU workstations. Agent talks to `https://HOST:8080/v1` on the LAN. Documents in Knowledge stay on the desk machine. You can pull the WAN cable and keep working if Ollama and Fabric are up.
 	</Accordion>
 
 	<Accordion title="What do we install on a laptop vs a GPU workstation?">
@@ -32,12 +32,16 @@ description: Fabric, Agent, air gap, models, and hardware.
 		One GPU workstation is enough to demonstrate. Larger models need more VRAM. Add machines with `houdry gpu register` on the same LAN. The Agent install does not change.
 	</Accordion>
 
-	<Accordion title="Why must the URL end with /v1?">
-		The OpenAI-shaped API lives under `/v1`. `http://HOST:8080` is the dashboard. `http://HOST:8080/v1` is what Agent and SDKs call. Missing `/v1` is a common connect failure.
+	<Accordion title="Why must the URL use https and end with /v1?">
+		The control plane is HTTPS only. The OpenAI-shaped API lives under `/v1`. `https://HOST:8080/` is the dashboard. `https://HOST:8080/v1` is what Agent and SDKs call. Missing `/v1` or using `http://` are common connect failures.
 	</Accordion>
 
 	<Accordion title="Agent cannot find the fabric">
-		Confirm `houdry serve` is listening on `0.0.0.0:8080`, that you are on the same Wi‑Fi, and that guest isolation is off. Otherwise paste the URL. See [Troubleshooting](/docs/troubleshooting).
+		Confirm `houdry serve` is listening (default `0.0.0.0:8080`), that you are on the same Wi-Fi, and that guest isolation is off. Agent probes ports 18080, 8090, and 8080. Otherwise paste `https://HOST:8080/v1`. See [Troubleshooting](/docs/troubleshooting).
+	</Accordion>
+
+	<Accordion title="gpu register vs gpu join vs node join?">
+		`houdry gpu register` and `houdry node join` are the same worker. Leave that running. `houdry gpu join` only posts an inventory snapshot and does not run jobs.
 	</Accordion>
 
 	<Accordion title="Is Houdry free?">

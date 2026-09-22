@@ -49,13 +49,13 @@ export function ArchitectureSplit() {
         <Panel where="On the desk" product="Houdry Agent">
           <p>Chat, Knowledge, SOPs, files, and local tools.</p>
           <p>
-            Talks to Fabric at <Code>http://HOST:8080/v1</Code>
+            Talks to Fabric at <Code>https://HOST:8080/v1</Code>
           </p>
         </Panel>
         <Arrow />
         <Panel where="On the GPU" product="Houdry Fabric">
           <p>
-            <Code>houdry serve</Code> on port 8080 is the control plane.
+            <Code>houdry serve</Code> is HTTPS on port 8080.
           </p>
           <p>
             <Code>houdry gpu register</Code> runs Ollama and returns the answer.
@@ -111,7 +111,7 @@ export function ProductRoles() {
       </Panel>
       <Panel where="On the desk" product="Install Agent">
         <p>
-          Point it at <Code>http://HOST:8080/v1</Code>
+          Point it at <Code>https://HOST:8080/v1</Code>
         </p>
         <p>Do not install Fabric on every laptop.</p>
       </Panel>

@@ -302,7 +302,7 @@ export async function InstallDownloads() {
           <div>
             <div className="text-sm font-semibold text-foreground">Houdry Agent</div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Desk app. Point it at <code>http://HOST:8080/v1</code>.
+              Desk app. Point it at <code>https://HOST:8080/v1</code>.
             </p>
           </div>
           <a

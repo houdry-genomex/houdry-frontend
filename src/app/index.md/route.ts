@@ -20,7 +20,7 @@ export function GET() {
     "## Features",
     "",
     "- **Houdry Fabric**: install from GitHub Releases on each GPU workstation, then `houdry serve` and `houdry gpu register`.",
-    "- **Houdry Agent**: desktop app for operators; points at `http://<fabric-host>:8080/v1`.",
+    "- **Houdry Agent**: desktop app for operators; points at `https://<fabric-host>:8080/v1`.",
     "- **On-prem routing**: `model=auto` picks the best (model, node) pair on the LAN.",
     "- **Air-gapped work**: reports, drawings, and code never leave the premises.",
     "",
