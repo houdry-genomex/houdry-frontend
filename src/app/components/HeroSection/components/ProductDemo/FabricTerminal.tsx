@@ -28,7 +28,7 @@ const AGENT_SESSION: TerminalLine[] = [
   },
   { kind: "ok", text: "Houdry Agent installed" },
   { kind: "dim", text: "onboarding → Houdry server URL" },
-  { kind: "ok", text: "connected http://gpu-ws-a:8080/v1  model=auto" },
+  { kind: "ok", text: "connected https://gpu-ws-a:8080/v1  model=auto" },
 ];
 
 function Line({

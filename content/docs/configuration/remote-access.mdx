@@ -3,9 +3,9 @@ title: LAN and fabric URL
 description: How Agent and GPU nodes find houdry serve.
 ---
 
-`houdry serve` announces itself on the local network (mDNS `_houdry._tcp` and UDP port `41808`). Houdry Agent and `houdry gpu register` browse for that announce.
+`houdry serve` announces itself on the local network (mDNS `_houdry._tcp` and UDP port `41808`). Houdry Agent and `houdry gpu register` browse for that announce. Agent also fetches `GET /.well-known/houdry.json` on ports 18080, 8090, and 8080.
 
-## One control plane on Wi‑Fi
+## One control plane on Wi-Fi
 
 You usually do not type an IP. Agent fills **Houdry server URL**. GPU nodes run:
 
@@ -13,12 +13,12 @@ You usually do not type an IP. Agent fills **Houdry server URL**. GPU nodes run:
 houdry gpu register
 ```
 
-## Several control planes, or isolated Wi‑Fi
+## Several control planes, or isolated Wi-Fi
 
-Paste the URL.
+Paste the URL. Use HTTPS and the port `serve` is listening on (default `8080`).
 
-- Nodes: `houdry gpu register --server http://HOST:8080`
-- Agent: `http://HOST:8080/v1`
+- Nodes: `houdry gpu register --server https://HOST:8080`
+- Agent: `https://HOST:8080/v1`
 
 Guest networks that isolate clients block discovery.
 
@@ -28,6 +28,11 @@ Guest networks that isolate clients block discovery.
 houdry serve --listen 0.0.0.0:8080 --no-lan-discover
 ```
 
-Then everyone uses an explicit URL. `GET http://HOST:8080/.well-known/houdry.json` confirms a host is Fabric.
+Then everyone uses an explicit URL. Confirm a host is Fabric:
+
+```bash
+curl --cacert "$HOME/.houdry/server/pki/root_ca.crt" \
+  https://HOST:8080/.well-known/houdry.json
+```
 
 Do not bind Fabric to the public internet. It is an on-prem control plane.

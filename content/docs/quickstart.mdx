@@ -20,6 +20,8 @@ On the GPU workstation, terminal 1:
 houdry serve --listen 0.0.0.0:8080
 ```
 
+That is HTTPS. Cluster dashboard: `https://127.0.0.1:8080/`.
+
 Terminal 2 on that machine (or on a second GPU box):
 
 ```bash
@@ -27,7 +29,7 @@ houdry gpu detect
 houdry gpu register
 ```
 
-Leave `register` running. Cluster dashboard: `http://127.0.0.1:8080/`.
+Leave `register` running. Same command as `houdry node join`. First join: run `houdry node enroll create` on the serve machine and use the `HDRY_…` token on the GPU host.
 
 </Step>
 <Step>
@@ -38,10 +40,10 @@ Open Houdry Agent. Choose **Houdry server URL**.
 
 | Agent is on… | URL |
 | --- | --- |
-| The same machine as `houdry serve` | `http://127.0.0.1:8080/v1` |
-| Another machine on the LAN | `http://HOST:8080/v1` |
+| The same machine as `houdry serve` | `https://127.0.0.1:8080/v1` |
+| Another machine on the LAN | `https://HOST:8080/v1` |
 
-Optional key: `houdry`. On one control plane on Wi‑Fi, the URL often fills in. Confirm with **Connect**. The model should read as fabric `auto` unless you pin a name.
+`/v1` is required. Model: `auto`. Optional key: `houdry` if you passed `--token` to `serve`. On one control plane on Wi-Fi, the URL often fills in. Confirm with **Connect**.
 
 </Step>
 <Step>
@@ -78,7 +80,7 @@ The fabric routes the work (`model=auto`) to a READY GPU node. The answer comes 
 2. `houdry gpu detect`: is a GPU listed?
 3. Is `houdry gpu register` still running (not exited)?
 4. Is Ollama up, with a model pulled?
-5. Is Agent pointed at `:8080/v1`, not a public LLM URL?
+5. Is Agent pointed at `https://HOST:8080/v1`, not a public LLM URL, and not HTTP?
 
 More in [Troubleshooting](/docs/troubleshooting).
 

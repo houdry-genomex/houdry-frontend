@@ -3,7 +3,7 @@ title: CLI
 description: "houdry serve, gpu register, routing, and jobs."
 ---
 
-The `houdry` binary is **Houdry Fabric**. It is what you install on GPU workstations. Houdry Agent is a separate desktop app; it is not this CLI.
+The `houdry` binary is **Houdry Fabric** ([houdry-genomex/houdry](https://github.com/houdry-genomex/houdry)). Install it on GPU workstations. Houdry Agent is a separate desktop app; it is not this CLI.
 
 After [Installation](/docs/installation):
 
@@ -12,34 +12,37 @@ export PATH="$HOME/.houdry/bin:$PATH"   # Windows: $HOME\.houdry\bin
 houdry version
 ```
 
-Set `HOODRY_SERVER` (and optional `HOODRY_TOKEN`) so you do not pass `--server` on every command. Config lives in `~/.houdry`.
+Set `HOUDRY_SERVER` (and optional `HOUDRY_TOKEN`) so you do not pass `--server` on every command. Config lives in `~/.houdry`.
 
 ## Everyday
 
 These four commands are the whole GPU-host job:
 
 ```text
-houdry gpu detect
-houdry gpu register [--server URL] [--token TOKEN]
-houdry serve [--listen ADDR] [--token TOKEN] [--no-lan-discover]
-houdry discover
+houdry gpu detect [--json]
+houdry gpu register [--server URL] [--token TOKEN] [--interval DURATION]
+houdry serve [--listen ADDR] [--data DIR] [--token TOKEN] [--no-lan-discover]
+houdry discover [--timeout DURATION] [--json]
 ```
 
 | Command | Meaning |
 | --- | --- |
-| `gpu detect` | List GPUs on this machine (`--json` for scripts). |
+| `gpu detect` | List GPUs on this machine. |
 | `gpu register` | Join the fabric and **stay running**. Same as `node join`. |
-| `serve` | Control plane + dashboard. Default listen `0.0.0.0:8080`. |
-| `discover` | See control planes announced on this Wi‑Fi. |
+| `serve` | Control plane + dashboard. Default listen `0.0.0.0:8080`, **HTTPS**. |
+| `discover` | See control planes announced on this Wi-Fi. |
 | `gpu join` | One-shot inventory snapshot. **Does not run jobs.** Use `gpu register`. |
+| `node enroll create` | One-time `HDRY_…` token so a GPU host can get a client cert. |
 | `version` | Print the installed Fabric version. |
 
 Leave `gpu register` running. Ctrl+C drains, waits for the current job, then leaves.
 
+`--token` on `serve` is an optional chat API key (`X-Houdry-Token` or `Authorization: Bearer`). It is **not** the enrollment token.
+
 ## Cluster
 
 ```text
-houdry node list
+houdry node list [--server URL] [--json]
 houdry node drain
 houdry node leave
 houdry gpu list
@@ -61,23 +64,32 @@ houdry route --interactive
 
 `houdry route --local` benches Ollama on this machine and does not start a second HTTP server. Chat from Agent always goes through `houdry serve`.
 
+Same-laptop smoke (control plane already up):
+
+```bash
+houdry node list --server https://127.0.0.1:8080
+houdry job submit gpu.smoke --server https://127.0.0.1:8080 --wait
+houdry route --prompt "Say hello in one sentence." --execute --wait --server https://127.0.0.1:8080
+```
+
 ## OpenAI-shaped API
 
 Agent and any OpenAI SDK use:
 
 ```text
-POST http://HOST:8080/v1/chat/completions
+POST https://HOST:8080/v1/chat/completions
 ```
 
 `model=auto` runs the router. A named model pins that model. `GET /.well-known/houdry.json` identifies a discovered host.
 
+Trust the local CA (`--cacert` or `SSL_CERT_FILE`):
+
 ```bash
-curl http://127.0.0.1:8080/v1/chat/completions \
+curl --cacert "$HOME/.houdry/server/pki/root_ca.crt" \
+  https://127.0.0.1:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d "{\"model\":\"auto\",\"messages\":[{\"role\":\"user\",\"content\":\"Say hello\"}]}"
 ```
-
-Pass `--token` on `serve` to require `X-Houdry-Token` or `Authorization: Bearer`.
 
 Useful paths on the same host:
 

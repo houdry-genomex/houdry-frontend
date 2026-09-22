@@ -5,6 +5,12 @@ description: Join more machines with houdry gpu register.
 
 The control plane stays one process (`houdry serve`). Each extra GPU box is another worker.
 
+On the serve machine, mint a one-time enroll token:
+
+```bash
+houdry node enroll create
+```
+
 On the new workstation:
 
 ```bash
@@ -14,20 +20,22 @@ houdry gpu detect
 houdry gpu register
 ```
 
-Windows: `install.ps1`, then `houdry.exe gpu detect` and `gpu register`.
+Windows: `install.ps1`, then `houdry.exe gpu detect` and `gpu register`. Use the `HDRY_…` token when register enrolls. Do not pass it as `--token`.
 
 If discovery fails:
 
 ```bash
-houdry gpu register --server http://HOST:8080
+houdry gpu register --server https://HOST:8080
 ```
 
-Leave `register` running. Ctrl+C drains, waits for the current job, then leaves.
+Leave `register` running. Ctrl+C drains, waits for the current job, then leaves. Same command as `houdry node join`. Do not use `houdry gpu join`.
+
+Also install Ollama on that box and pull at least one model.
 
 Agent does not need a reinstall. `model=auto` will start using the new READY node when it scores better for a task.
 
 Check:
 
 ```bash
-houdry node list --server http://127.0.0.1:8080
+houdry node list --server https://127.0.0.1:8080
 ```

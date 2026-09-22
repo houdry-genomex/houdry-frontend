@@ -93,7 +93,7 @@ export default async function DownloadPage() {
               </h2>
               <p className="mt-2 text-base text-muted-foreground">
                 Desktop app for operators. After install, choose Houdry server
-                URL: <code className="font-mono text-sm">http://&lt;host&gt;:8080/v1</code>.
+                URL: <code className="font-mono text-sm">https://&lt;host&gt;:8080/v1</code>.
               </p>
               <div className="mt-6 flex flex-col gap-2">
                 <CopyInstallCommand

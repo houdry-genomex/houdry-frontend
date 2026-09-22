@@ -3,19 +3,19 @@ title: What Houdry is
 description: Private GPU fabric plus a desktop agent. Work stays on your network.
 ---
 
-Houdry is two products that work together. They are not the same install.
+Houdry is two products. They are not the same install.
 
 <ProductRoles />
 
-Fabric owns the GPUs and the models. Agent owns the people and the files. There is no cloud LLM API in the path.
+**Houdry Fabric** is the `houdry` CLI. It owns the GPUs, the model catalog, and inference. **Houdry Agent** is the desktop app. It owns the people, the files, and the tools. There is no cloud LLM API in the path.
 
 <Callout type="info" title="If you only remember one thing">
-	Install Fabric on the machine with the GPU. Install Agent on the desk. Point Agent at `http://HOST:8080/v1`. Do not put Fabric on every laptop.
+	Install Fabric on the machine with the GPU. Install Agent on the desk. Point Agent at `https://HOST:8080/v1`. Do not put Fabric on every laptop.
 </Callout>
 
 ## Which page should I open?
 
-- **Ops / GPU owner** → [Installation](/docs/installation), then keep `houdry serve` and `houdry gpu register` running.
+- **Ops / GPU owner** → [Installation](/docs/installation), then leave `houdry serve` and `houdry gpu register` running.
 - **Everyone else on the desk** → [Installation](/docs/installation) (Agent only), then [Houdry Agent](/docs/dashboard).
 - **First time, both machines in front of you** → [Quickstart](/docs/quickstart).
 - **How the pieces connect** → [Architecture](/docs/architecture).
@@ -24,6 +24,8 @@ Fabric owns the GPUs and the models. Agent owns the people and the files. There 
 ## How they connect
 
 <ArchitectureSplit />
+
+People never talk to the GPU process. They talk to Agent. Agent talks to Fabric over `POST /v1/chat/completions`. Fabric picks a model on a READY GPU.
 
 ## What you can do once it is connected
 

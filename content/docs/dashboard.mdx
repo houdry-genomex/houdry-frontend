@@ -3,20 +3,38 @@ title: Houdry Agent
 description: "The desktop app: sessions, knowledge, SOPs, and chat against the fabric."
 ---
 
-Houdry Agent is what operators open. It does **not** serve models and it does **not** replace `houdry`. It sends prompts to Houdry Fabric at `http://HOST:8080/v1`.
+Houdry Agent is what operators open ([houdry-genomex/houdry-agent](https://github.com/houdry-genomex/houdry-agent)). It does **not** serve models and it does **not** replace `houdry`. It sends prompts to Houdry Fabric at `https://HOST:8080/v1`.
 
 <Callout type="info" title="Connect first">
-	If chat is empty or errors, open Settings and confirm **Houdry server URL** is `http://HOST:8080/v1` (note `/v1`). See [Installation](/docs/installation).
+	If chat is empty or errors, open Settings and confirm **Houdry server URL** is `https://HOST:8080/v1` (HTTPS, and note `/v1`). See [Installation](/docs/installation).
 </Callout>
 
 ## First-run
 
 1. Choose **Houdry server URL** (recommended). Do not leave a public OpenAI / Azure endpoint selected if you want on-prem models.
-2. Accept the discovered fabric, or paste `http://HOST:8080/v1`.
-3. Optional token: `houdry` (required if Fabric was started with `--token`).
-4. Connect. Model should read as fabric `auto` unless you pin a name.
+2. Accept the discovered fabric, or paste `https://HOST:8080/v1`.
+3. Model: `auto`.
+4. Optional token: `houdry` (required if Fabric was started with `--token`).
+5. Connect.
 
-Same machine as Fabric: `http://127.0.0.1:8080/v1`.
+Same machine as Fabric: `https://127.0.0.1:8080/v1`.
+
+Equivalent files if you skip the UI:
+
+```yaml
+# ~/.houdry-agent/config.yaml
+model:
+  provider: custom
+  base_url: https://127.0.0.1:8080/v1
+  default: auto
+```
+
+```bash
+# ~/.houdry-agent/.env
+OPENAI_API_KEY=houdry
+```
+
+`OPENAI_API_KEY` here is only the token Fabric expects. It does not send traffic to OpenAI.
 
 ## Sessions
 
