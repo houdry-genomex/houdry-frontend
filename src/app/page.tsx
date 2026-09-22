@@ -7,7 +7,6 @@ import {
 } from "@/components/JsonLd";
 import { getGitHubRepoStats } from "@/lib/github-stats";
 import { FAQ_ITEMS } from "./components/FAQSection/constants";
-import { ClusterSection } from "./components/ClusterSection/ClusterSection";
 import { HeroSection } from "./components/HeroSection";
 import { TrackedSection } from "./components/TrackedSection/TrackedSection";
 
@@ -48,9 +47,6 @@ export default async function Home() {
       </TrackedSection>
       <TrackedSection section="features">
         <FeaturesSection />
-      </TrackedSection>
-      <TrackedSection section="cluster">
-        <ClusterSection />
       </TrackedSection>
       <TrackedSection section="video">
         <VideoSection />
